@@ -5,20 +5,19 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Locations
+ * Location
  *
  * @ORM\Table(name="locations", indexes={@ORM\Index(name="IDX_17E64ABAFEBBDC20", columns={"cities_nb_city"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\LocationRepository")
  */
-class Locations
+class Location
 {
     /**
      * @var int
      *
      * @ORM\Column(name="nb_location", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="locations_nb_location_seq", allocationSize=1, initialValue=1)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $nbLocation;
 
@@ -51,14 +50,36 @@ class Locations
     private $longitude;
 
     /**
-     * @var Cities
+     * @var City
      *
-     * @ORM\ManyToOne(targetEntity="Cities")
+     * @ORM\ManyToOne(targetEntity="City", cascade={"persist"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="cities_nb_city", referencedColumnName="nb_city")
+     *   @ORM\JoinColumn(name="cities_nb_city", referencedColumnName="nb_city", nullable=false)
      * })
      */
-    private $citiesNbCity;
+    private $city;
+
+    /**
+     * Location constructor.
+     * @param string $nameLocation
+     * @param string|null $street
+     * @param float|null $latitude
+     * @param float|null $longitude
+     * @param City $city
+     */
+    public function __construct(string $nameLocation,
+                                ?string $street,
+                                ?float $latitude,
+                                ?float $longitude,
+                                City $city)
+    {
+        $this->nameLocation = $nameLocation;
+        $this->street = $street;
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+        $this->city = $city;
+    }
+
 
     public function getNbLocation(): ?int
     {
@@ -113,17 +134,15 @@ class Locations
         return $this;
     }
 
-    public function getCitiesNbCity(): ?Cities
+    public function getCity(): ?City
     {
-        return $this->citiesNbCity;
+        return $this->city;
     }
 
-    public function setCitiesNbCity(?Cities $citiesNbCity): self
+    public function setCity(?City $city): self
     {
-        $this->citiesNbCity = $citiesNbCity;
+        $this->city = $city;
 
         return $this;
     }
-
-
 }

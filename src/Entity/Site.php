@@ -5,20 +5,19 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Sites
+ * Site
  *
  * @ORM\Table(name="sites")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\SiteRepository")
  */
-class Sites
+class Site
 {
     /**
      * @var int
      *
      * @ORM\Column(name="nb_site", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="sites_nb_site_seq", allocationSize=1, initialValue=1)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $nbSite;
 
@@ -28,6 +27,16 @@ class Sites
      * @ORM\Column(name="name_site", type="string", length=30, nullable=false)
      */
     private $nameSite;
+
+    /**
+     * Site constructor.
+     * @param string $nameSite
+     */
+    public function __construct(string $nameSite)
+    {
+        $this->nameSite = $nameSite;
+    }
+
 
     public function getNbSite(): ?int
     {
@@ -45,6 +54,4 @@ class Sites
 
         return $this;
     }
-
-
 }

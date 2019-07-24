@@ -5,20 +5,19 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Cities
+ * City
  *
  * @ORM\Table(name="cities")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\CityRepository")
  */
-class Cities
+class City
 {
     /**
      * @var int
      *
      * @ORM\Column(name="nb_city", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="cities_nb_city_seq", allocationSize=1, initialValue=1)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $nbCity;
 
@@ -35,6 +34,18 @@ class Cities
      * @ORM\Column(name="postal_code", type="string", length=10, nullable=false)
      */
     private $postalCode;
+
+    /**
+     * City constructor.
+     * @param string $nameCity
+     * @param string $postalCode
+     */
+    public function __construct(string $nameCity, string $postalCode)
+    {
+        $this->nameCity = $nameCity;
+        $this->postalCode = $postalCode;
+    }
+
 
     public function getNbCity(): ?int
     {
@@ -64,6 +75,5 @@ class Cities
 
         return $this;
     }
-
 
 }

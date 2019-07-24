@@ -5,20 +5,19 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * States
+ * State
  *
  * @ORM\Table(name="states")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\StateRepository")
  */
-class States
+class State
 {
     /**
      * @var int
      *
      * @ORM\Column(name="nb_state", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="states_nb_state_seq", allocationSize=1, initialValue=1)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $nbState;
 
@@ -28,6 +27,16 @@ class States
      * @ORM\Column(name="word", type="string", length=30, nullable=false)
      */
     private $word;
+
+    /**
+     * State constructor.
+     * @param string $word
+     */
+    public function __construct(string $word)
+    {
+        $this->word = $word;
+    }
+
 
     public function getNbState(): ?int
     {
@@ -45,6 +54,4 @@ class States
 
         return $this;
     }
-
-
 }

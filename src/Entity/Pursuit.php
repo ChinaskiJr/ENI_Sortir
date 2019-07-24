@@ -9,20 +9,19 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Pursuits
+ * Pursuit
  *
  * @ORM\Table(name="pursuits", indexes={@ORM\Index(name="IDX_1602BBD5172FCCFB", columns={"states_nb_state"}), @ORM\Index(name="IDX_1602BBD52CBE1004", columns={"locations_nb_location"}), @ORM\Index(name="IDX_1602BBD599D47173", columns={"organizer"}), @ORM\Index(name="IDX_1602BBD5ED5DE765", columns={"sites_nb_site"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\PursuitRepository")
  */
-class Pursuits
+class Pursuit
 {
     /**
      * @var int
      *
      * @ORM\Column(name="nb_pursuit", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="pursuits_nb_pursuit_seq", allocationSize=1, initialValue=1)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $nbPursuit;
 
@@ -80,70 +79,98 @@ class Pursuits
      *
      * @ORM\Column(name="urlpicture", type="string", length=250, nullable=true)
      */
-    private $urlpicture;
+    private $urlPicture;
 
     /**
-     * @var States
+     * @var State
      *
-     * @ORM\ManyToOne(targetEntity="States")
+     * @ORM\ManyToOne(targetEntity="State", cascade={"persist"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="states_nb_state", referencedColumnName="nb_state")
+     *   @ORM\JoinColumn(name="states_nb_state", referencedColumnName="nb_state", nullable=false)
      * })
      */
-    private $statesNbState;
+    private $state;
 
     /**
-     * @var Locations
+     * @var Location
      *
-     * @ORM\ManyToOne(targetEntity="Locations")
+     * @ORM\ManyToOne(targetEntity="Location", cascade={"persist"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="locations_nb_location", referencedColumnName="nb_location")
+     *   @ORM\JoinColumn(name="locations_nb_location", referencedColumnName="nb_location", nullable=false)
      * })
      */
-    private $locationsNbLocation;
+    private $location;
 
     /**
-     * @var Participants
+     * @var Participant
      *
-     * @ORM\ManyToOne(targetEntity="Participants")
+     * @ORM\ManyToOne(targetEntity="Participant", cascade={"persist"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="organizer", referencedColumnName="nb_participant")
+     *   @ORM\JoinColumn(name="organizer", referencedColumnName="nb_participant", nullable=false)
      * })
      */
     private $organizer;
 
     /**
-     * @var Sites
+     * @var Site
      *
-     * @ORM\ManyToOne(targetEntity="Sites")
+     * @ORM\ManyToOne(targetEntity="Site", cascade={"persist"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sites_nb_site", referencedColumnName="nb_site")
+     *   @ORM\JoinColumn(name="sites_nb_site", referencedColumnName="nb_site", nullable=false)
      * })
      */
-    private $sitesNbSite;
+    private $site;
 
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Participants", inversedBy="pursuitsNbPursuit")
-     * @ORM\JoinTable(name="registrations",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="pursuits_nb_pursuit", referencedColumnName="nb_pursuit")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="participants_nb_participant", referencedColumnName="nb_participant")
-     *   }
-     * )
+     * @ORM\OneToMany(targetEntity="Registration", mappedBy="pursuit")
      */
-    private $participantsNbParticipant;
+    private $registrations;
 
     /**
-     * Constructor
+     * Pursuit constructor.
+     * @param string $name
+     * @param DateTime $dateStart
+     * @param int|null $duration
+     * @param DateTime $dateEnd
+     * @param int $nbMaxRegistrations
+     * @param string|null $description
+     * @param int|null $statePursuit
+     * @param string|null $urlPicture
+     * @param State $state
+     * @param Location $location
+     * @param Participant $organizer
+     * @param Site $site
      */
-    public function __construct()
+    public function __construct(string $name,
+                                DateTime $dateStart,
+                                ?int $duration,
+                                DateTime $dateEnd,
+                                int $nbMaxRegistrations,
+                                ?string $description,
+                                ?int $statePursuit,
+                                ?string $urlPicture,
+                                State $state,
+                                Location $location,
+                                Participant $organizer,
+                                Site $site)
     {
-        $this->participantsNbParticipant = new ArrayCollection();
+        $this->name = $name;
+        $this->dateStart = $dateStart;
+        $this->duration = $duration;
+        $this->dateEnd = $dateEnd;
+        $this->nbMaxRegistrations = $nbMaxRegistrations;
+        $this->description = $description;
+        $this->statePursuit = $statePursuit;
+        $this->urlPicture = $urlPicture;
+        $this->state = $state;
+        $this->location = $location;
+        $this->organizer = $organizer;
+        $this->site = $site;
+        $this->registrations = new ArrayCollection();
     }
+
 
     public function getNbPursuit(): ?int
     {
@@ -236,88 +263,92 @@ class Pursuits
 
     public function getUrlPicture(): ?string
     {
-        return $this->urlpicture;
+        return $this->urlPicture;
     }
 
     public function setUrlPicture(?string $urlPicture): self
     {
-        $this->urlpicture = $urlPicture;
+        $this->urlPicture = $urlPicture;
 
         return $this;
     }
 
-    public function getStatesNbState(): ?States
+    public function getState(): ?State
     {
-        return $this->statesNbState;
+        return $this->state;
     }
 
-    public function setStatesNbState(?States $statesNbState): self
+    public function setState(?State $state): self
     {
-        $this->statesNbState = $statesNbState;
+        $this->state = $state;
 
         return $this;
     }
 
-    public function getLocationsNbLocation(): ?Locations
+    public function getLocation(): ?Location
     {
-        return $this->locationsNbLocation;
+        return $this->location;
     }
 
-    public function setLocationsNbLocation(?Locations $locationsNbLocation): self
+    public function setLocation(?Location $location): self
     {
-        $this->locationsNbLocation = $locationsNbLocation;
+        $this->location = $location;
 
         return $this;
     }
 
-    public function getOrganizer(): ?Participants
+    public function getOrganizer(): ?Participant
     {
         return $this->organizer;
     }
 
-    public function setOrganizer(?Participants $organizer): self
+    public function setOrganizer(?Participant $organizer): self
     {
         $this->organizer = $organizer;
 
         return $this;
     }
 
-    public function getSitesNbSite(): ?Sites
+    public function getSite(): ?Site
     {
-        return $this->sitesNbSite;
+        return $this->site;
     }
 
-    public function setSitesNbSite(?Sites $sitesNbSite): self
+    public function setSite(?Site $site): self
     {
-        $this->sitesNbSite = $sitesNbSite;
+        $this->site = $site;
 
         return $this;
     }
 
     /**
-     * @return Collection|Participants[]
+     * @return Collection|Registration[]
      */
-    public function getParticipantsNbParticipant(): Collection
+    public function getRegistrations(): Collection
     {
-        return $this->participantsNbParticipant;
+        return $this->registrations;
     }
 
-    public function addParticipantsNbParticipant(Participants $participantsNbParticipant): self
+    public function addRegistration(Registration $registration): self
     {
-        if (!$this->participantsNbParticipant->contains($participantsNbParticipant)) {
-            $this->participantsNbParticipant[] = $participantsNbParticipant;
+        if (!$this->registrations->contains($registration)) {
+            $this->registrations[] = $registration;
+            $registration->setPursuit($this);
         }
 
         return $this;
     }
 
-    public function removeParticipantsNbParticipant(Participants $participantsNbParticipant): self
+    public function removeRegistration(Registration $registration): self
     {
-        if ($this->participantsNbParticipant->contains($participantsNbParticipant)) {
-            $this->participantsNbParticipant->removeElement($participantsNbParticipant);
+        if ($this->registrations->contains($registration)) {
+            $this->registrations->removeElement($registration);
+            // set the owning side to null (unless already changed)
+            if ($registration->getPursuit() === $this) {
+                $registration->setPursuit(null);
+            }
         }
 
         return $this;
     }
-
 }

@@ -7,103 +7,119 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Participants
+ * Participant
  *
  * @ORM\Table(name="participants", uniqueConstraints={@ORM\UniqueConstraint(name="participants_pseudo_uk", columns={"pseudo"})}, indexes={@ORM\Index(name="IDX_7169709251C3F4BB", columns={"sites_no_site"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ParticipantRepository")
  */
-class Participants
+class Participant
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="nb_participant", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="participants_nb_participant_seq", allocationSize=1, initialValue=1)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $nbParticipant;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="pseudo", type="string", length=30, nullable=false)
      */
     private $pseudo;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="last_name", type="string", length=30, nullable=false)
      */
     private $lastName;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="first_name", type="string", length=30, nullable=false)
      */
     private $firstName;
 
     /**
      * @var string|null
-     *
      * @ORM\Column(name="phone", type="string", length=15, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="mail", type="string", length=20, nullable=false)
      */
     private $mail;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="password", type="string", length=20, nullable=false)
      */
     private $password;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="admin", type="boolean", nullable=false)
      */
     private $admin;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
 
     /**
-     * @var Sites
-     *
-     * @ORM\ManyToOne(targetEntity="Sites")
+     * @var Site
+     * @ORM\ManyToOne(targetEntity="Site", cascade={"persist"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sites_no_site", referencedColumnName="nb_site")
+     *   @ORM\JoinColumn(name="sites_no_site", referencedColumnName="nb_site", nullable=false)
      * })
      */
-    private $sitesNoSite;
+    private $site;
 
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Pursuits", mappedBy="participantsNbParticipant")
+     * @ORM\OneToMany(targetEntity="Registration", mappedBy="participant", cascade={"persist"})
      */
-    private $pursuitsNbPursuit;
+    private $registrations;
 
     /**
-     * Constructor
+     * Participant constructor.
+     * @param string $pseudo
+     * @param string $lastName
+     * @param string $firstName
+     * @param string|null $phone
+     * @param string $mail
+     * @param string $password
+     * @param bool $admin
+     * @param bool $active
+     * @param Site $site
      */
-    public function __construct()
+    public function __construct(string $pseudo,
+                                string $lastName,
+                                string $firstName,
+                                ?string $phone,
+                                string $mail,
+                                string $password,
+                                bool $admin,
+                                bool $active,
+                                Site $site)
     {
-        $this->pursuitsNbPursuit = new ArrayCollection();
+        $this->pseudo = $pseudo;
+        $this->lastName = $lastName;
+        $this->firstName = $firstName;
+        $this->phone = $phone;
+        $this->mail = $mail;
+        $this->password = $password;
+        $this->admin = $admin;
+        $this->active = $active;
+        $this->site = $site;
+        $this->registrations = new ArrayCollection();
     }
+
 
     public function getNbParticipant(): ?int
     {
@@ -206,44 +222,46 @@ class Participants
         return $this;
     }
 
-    public function getSitesNoSite(): ?Sites
+    public function getSite(): ?Site
     {
-        return $this->sitesNoSite;
+        return $this->site;
     }
 
-    public function setSitesNoSite(?Sites $sitesNoSite): self
+    public function setSite(?Site $site): self
     {
-        $this->sitesNoSite = $sitesNoSite;
+        $this->site = $site;
 
         return $this;
     }
 
     /**
-     * @return Collection|Pursuits[]
+     * @return Collection|Registration[]
      */
-    public function getPursuitsNbPursuit(): Collection
+    public function getRegistrations(): Collection
     {
-        return $this->pursuitsNbPursuit;
+        return $this->registrations;
     }
 
-    public function addPursuitsNbPursuit(Pursuits $pursuitsNbPursuit): self
+    public function addRegistration(Registration $registration): self
     {
-        if (!$this->pursuitsNbPursuit->contains($pursuitsNbPursuit)) {
-            $this->pursuitsNbPursuit[] = $pursuitsNbPursuit;
-            $pursuitsNbPursuit->addParticipantsNbParticipant($this);
+        if (!$this->registrations->contains($registration)) {
+            $this->registrations[] = $registration;
+            $registration->setParticipant($this);
         }
 
         return $this;
     }
 
-    public function removePursuitsNbPursuit(Pursuits $pursuitsNbPursuit): self
+    public function removeRegistration(Registration $registration): self
     {
-        if ($this->pursuitsNbPursuit->contains($pursuitsNbPursuit)) {
-            $this->pursuitsNbPursuit->removeElement($pursuitsNbPursuit);
-            $pursuitsNbPursuit->removeParticipantsNbParticipant($this);
+        if ($this->registrations->contains($registration)) {
+            $this->registrations->removeElement($registration);
+            // set the owning side to null (unless already changed)
+            if ($registration->getParticipant() === $this) {
+                $registration->setParticipant(null);
+            }
         }
 
         return $this;
     }
-
 }
