@@ -1,3 +1,7 @@
 controllers:
     resource: ../../src/Controller/
     type: annotation
+participant:
+    resource: App\Controller\ParticipantController
+    type: rest
+
