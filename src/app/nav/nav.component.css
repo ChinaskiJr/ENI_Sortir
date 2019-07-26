@@ -1,0 +1,16 @@
+ul {
+  list-style: none;
+}
+nav {
+  background-color: #6898b7;
+  color: ghostwhite;
+}
+a {
+  color: ghostwhite;
+}
+.link {
+  text-decoration: underline;
+}
+.link:hover {
+  cursor: pointer;
+}

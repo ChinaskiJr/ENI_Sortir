@@ -8,8 +8,11 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ErrorComponent } from './error/error.component';
+import { NavComponent } from './nav/nav.component';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {BasicAuthHttpInterceptor} from './helpers/BasicAuthHttpInterceptor';
 
 // Set up the locale to french
 registerLocaleData(localeFr, 'fr');
@@ -20,15 +23,19 @@ registerLocaleData(localeFr, 'fr');
     HeaderComponent,
     HomeComponent,
     LoginComponent,
-    ErrorComponent
+    ErrorComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
-    {provide: LOCALE_ID, useValue: 'fr'},
+    { provide: LOCALE_ID, useValue: 'fr' },
+    { provide: HTTP_INTERCEPTORS, useClass: BasicAuthHttpInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,42 @@
+<div class="container">
+  <h3>Connexion</h3>
+  <form [formGroup]="loginForm">
+    <div>
+      <label for="pseudo">Nom :</label>
+      <input type="text"
+             id="pseudo" formControlName="pseudo"
+             [ngClass]="{
+                'form-control': true,
+                'is-invalid': pseudoNotValid()
+              }">
+    </div>
+    <div *ngIf="pseudoNotValid()" class="alert-danger">
+      Le pseudo est obligatoire
+    </div>
+    <div>
+      <label for="password">Mot de passe :</label>
+      <input type="password"
+             id="password" formControlName="password"
+             [ngClass]="{
+                'form-control': true,
+                'is-invalid': passwordNotValid()
+              }">
+    </div>
+    <div *ngIf="passwordNotValid()" class="alert-danger">
+      Le mot de passe est obligatoire
+    </div>
+    <div *ngIf="error == '404'" class="alert-danger">
+      Ce pseudo n'existe pas
+    </div>
+    <div *ngIf="error == '403'" class="alert-danger">
+      Mauvais mot de passe
+    </div>
+    <button
+      type="submit"
+      class="btn btn-success mt-3"
+      [disabled]="issueValidation()"
+      (click)="onLogin()">
+      Connexion
+    </button>
+  </form>
+</div>

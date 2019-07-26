@@ -1,0 +1,6 @@
+<nav class="navbar navbar-light">
+  <ul class="navbar-nav">
+    <li *ngIf="!isUserLoggedIn" class="nav-item active"><a routerLink="login">Connexion</a></li>
+    <li *ngIf="isUserLoggedIn" class="nav-item active">{{ currentUser["pseudo"] }} <span class="link" (click)="onDisconnect()">(se déconnecter)</span></li>
+  </ul>
+</nav>
