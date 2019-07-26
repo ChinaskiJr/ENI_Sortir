@@ -16,7 +16,11 @@ class ParticipantControllerTest extends WebTestCase
     private $client;
 
     protected function setUp() {
-        $this->client = static::createClient([], ['HTTP_ACCEPT' => 'application/json']);
+        $this->client = static::createClient([], [
+            'HTTP_ACCEPT' => 'application/json',
+            'PHP_AUTH_USER' => 'eni_user',
+            'PHP_AUTH_PW' => 'P4$$w0rd!'
+            ]);
     }
 
     public function testParticipantLoginAction() {
