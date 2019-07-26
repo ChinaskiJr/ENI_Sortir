@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
             'Arthur',
             null,
             'arthur@gmail.com',
-            'weakPassword',
+            password_hash('weakPassword', PASSWORD_BCRYPT),
             false,
             true,
             $site);
@@ -59,7 +59,7 @@ class AppFixtures extends Fixture
                 'Guillaume' . $i,
                 null,
                 'guillaume@gmail.com',
-                'weakPassword',
+                password_hash('weakPassword', PASSWORD_BCRYPT),
                 false,
                 true,
                 new Site('Nantes')

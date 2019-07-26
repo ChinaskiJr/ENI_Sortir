@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Participant;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\View\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ParticipantController extends AbstractFOSRestController
@@ -13,7 +13,7 @@ class ParticipantController extends AbstractFOSRestController
     /**
      * @param $pseudo
      * @param $password
-     * @return Response
+     * @return View
      *
      * @Rest\View()
      */
@@ -26,10 +26,12 @@ class ParticipantController extends AbstractFOSRestController
             throw new HttpException(404, 'Pseudo inconnu');
         }
         // 403 if the pseudo is wrong
-        if ($participant->getPassword() != $password) {
-            throw new HttpException(403, 'Le mot de passe est incorrect');
-        }
+         if (!password_verify($password, $participant->getPassword())) {
+             throw new HttpException(403, 'Le mot de passe est incorrect');
+         }
         // 200 and $participant serialized if all is good
+        // Remove the password from the entity before serializing it
+        $participant->setPassword('');
         return $participant;
     }
 }
