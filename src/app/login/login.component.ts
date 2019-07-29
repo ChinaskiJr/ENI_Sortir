@@ -24,7 +24,8 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group(
       {
         pseudo: ['', Validators.required],
-        password: ['', Validators.required]
+        password: ['', Validators.required],
+        rememberMe: ['']
       }
     );
   }
@@ -50,6 +51,9 @@ export class LoginComponent implements OnInit {
     return this.loginForm.pristine || this.loginForm.invalid;
   }
 
+  /**
+   * Login the user, call the service for tokens if "remember me" was checked
+   */
   onLogin() {
     const formValue = this.loginForm.value;
     if (!this.issueValidation()) {
@@ -58,10 +62,12 @@ export class LoginComponent implements OnInit {
         .subscribe(
           (response) => {
             this.participant = response;
-            // Store our user in the localStorage
-            LoginManagementService.storeCurrentUser(this.participant);
-            // Update the observable
-            this.loginManager.isUserLoggedIn.next(true);
+            // If no remember me : only store our user in the localStorage
+            this.loginManager.storeCurrentUser(this.participant);
+            // else also in cookies :
+            if (formValue.rememberMe) {
+               this.loginManager.rememberCurrentUser(this.participant).subscribe();
+            }
             this.router.navigate(['/home']);
           },
           (error) => {

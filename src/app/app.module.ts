@@ -13,6 +13,7 @@ import { ErrorComponent } from './error/error.component';
 import { NavComponent } from './nav/nav.component';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {BasicAuthHttpInterceptor} from './helpers/BasicAuthHttpInterceptor';
+import { CookieService } from 'ngx-cookie-service';
 
 // Set up the locale to french
 registerLocaleData(localeFr, 'fr');
@@ -31,11 +32,12 @@ registerLocaleData(localeFr, 'fr');
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr' },
-    { provide: HTTP_INTERCEPTORS, useClass: BasicAuthHttpInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: BasicAuthHttpInterceptor, multi: true },
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

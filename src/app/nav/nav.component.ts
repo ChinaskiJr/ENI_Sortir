@@ -25,6 +25,6 @@ export class NavComponent implements OnInit {
   }
 
   onDisconnect() {
-    this.loginManagement.logoutCurrentUser();
+    this.loginManagement.logoutCurrentUser(this.currentUser);
   }
 }
