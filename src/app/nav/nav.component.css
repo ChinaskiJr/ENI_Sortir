@@ -8,9 +8,7 @@ nav {
 a {
   color: ghostwhite;
 }
-.link {
-  text-decoration: underline;
-}
 .link:hover {
   cursor: pointer;
+  text-decoration: underline;
 }

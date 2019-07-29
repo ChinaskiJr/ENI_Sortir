@@ -10,6 +10,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class LoginManagementService {
 
   public isUserLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public currentUser: any = JSON.parse(localStorage.getItem('currentUser'));
 
   constructor(private httpClient: HttpClient,
               private cookieService: CookieService) {

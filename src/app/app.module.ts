@@ -14,6 +14,7 @@ import { NavComponent } from './nav/nav.component';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {BasicAuthHttpInterceptor} from './helpers/BasicAuthHttpInterceptor';
 import { CookieService } from 'ngx-cookie-service';
+import { ProfileComponent } from './profile/profile.component';
 
 // Set up the locale to french
 registerLocaleData(localeFr, 'fr');
@@ -25,7 +26,8 @@ registerLocaleData(localeFr, 'fr');
     HomeComponent,
     LoginComponent,
     ErrorComponent,
-    NavComponent
+    NavComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
