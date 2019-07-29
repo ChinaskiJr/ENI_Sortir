@@ -1,34 +1,38 @@
 <div class="container">
-  <h3>Connexion</h3>
+  <h3 class="mt-3">Connexion</h3>
   <form [formGroup]="loginForm">
-    <div>
-      <label for="pseudo">Nom :</label>
-      <input type="text"
-             id="pseudo" formControlName="pseudo"
-             [ngClass]="{
+    <div class="form-group row">
+      <label for="pseudo" class=" col-sm-4 col-lg-2 col-form-label">Nom</label>
+      <div class="col-sm-8 col-lg-10">
+        <input type="text" class="form-control"
+               id="pseudo" formControlName="pseudo"
+               [ngClass]="{
                 'form-control': true,
                 'is-invalid': pseudoNotValid()
               }">
+      </div>
     </div>
-    <div *ngIf="pseudoNotValid()" class="alert-danger">
+    <div *ngIf="pseudoNotValid()" class="alert-danger p-2">
       Le pseudo est obligatoire
     </div>
-    <div>
-      <label for="password">Mot de passe :</label>
-      <input type="password"
-             id="password" formControlName="password"
-             [ngClass]="{
+    <div class="form-group row">
+      <label for="password" class=" col-sm-4 col-lg-2 col-form-label">Mot de passe</label>
+      <div class="col-sm-8 col-lg-10">
+        <input type="password"
+               id="password" formControlName="password"
+               [ngClass]="{
                 'form-control': true,
                 'is-invalid': passwordNotValid()
               }">
+      </div>
     </div>
-    <div *ngIf="passwordNotValid()" class="alert-danger">
+    <div *ngIf="passwordNotValid()" class="alert-danger p-2">
       Le mot de passe est obligatoire
     </div>
-    <div *ngIf="error == '404'" class="alert-danger">
+    <div *ngIf="error == '404'" class="alert-danger p-2">
       Ce pseudo n'existe pas
     </div>
-    <div *ngIf="error == '403'" class="alert-danger">
+    <div *ngIf="error == '403'" class="alert-danger p-2">
       Mauvais mot de passe
     </div>
     <button
