@@ -2,6 +2,8 @@
 fos_rest:
 #    param_fetcher_listener:  true
 #    allowed_methods_listener:  true
+    body_converter:
+        enabled: true
     routing_loader:
         include_format: false
         default_format: json

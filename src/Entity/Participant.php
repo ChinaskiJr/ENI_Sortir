@@ -87,6 +87,14 @@ class Participant
     private $registrations;
 
     /**
+     * The token for rememberMe functionality
+     * @var string
+     *
+     * @ORM\Column(name="rememberMeToken", type="string", length=255, nullable=true)
+     */
+    private $token;
+
+    /**
      * Participant constructor.
      * @param string $pseudo
      * @param string $lastName
@@ -264,4 +272,22 @@ class Participant
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     */
+    public function setToken(string $token): void
+    {
+        $this->token = $token;
+    }
+
+
 }
