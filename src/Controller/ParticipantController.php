@@ -7,6 +7,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ParticipantController extends AbstractFOSRestController
@@ -28,11 +29,11 @@ class ParticipantController extends AbstractFOSRestController
         $participant = $repository->findOneBy(array('pseudo' => $pseudo));
         // 404 if no pseudo
         if (empty($participant)) {
-            throw new HttpException(404, 'Pseudo inconnu');
+            throw new HttpException(Response::HTTP_NOT_FOUND, 'Pseudo inconnu');
         }
         // 403 if the pseudo is wrong
          if (!password_verify($password, $participant->getPassword())) {
-             throw new HttpException(403, 'Le mot de passe est incorrect');
+             throw new HttpException(Response::HTTP_FORBIDDEN, 'Le mot de passe est incorrect');
          }
         // 200 and $participant serialized if all is good
         // Remove the password from the entity before serializing it
@@ -79,11 +80,62 @@ class ParticipantController extends AbstractFOSRestController
         $encryptedToken = openssl_encrypt($pseudo, 'aes-256-ctr', $token, 0, self::IV);
         // Check the token
         if ($participant->getToken() !== $encryptedToken) {
-            throw new HttpException(404, 'Token inconnu ou invalide');
+            throw new HttpException(Response::HTTP_NOT_FOUND, 'Token inconnu ou invalide');
         } else {
             // Remove the password from the entity before serializing it
             $participant->setPassword('');
             return $participant;
         }
+    }
+
+    /**
+     * Get a participant by his id
+     *
+     * @param $nbParticipant int The id of the participant to get
+     * @return Participant
+     *
+     * @Rest\View()
+     */
+    public function getParticipantAction($nbParticipant) {
+        $repository = $this->getDoctrine()->getRepository(Participant::class);
+        $participant = $repository->find($nbParticipant);
+        if (empty($participant)) {
+            throw new HttpException(Response::HTTP_NOT_FOUND, 'Aucun utilisateur avec cet ID');
+        }
+        return $participant;
+    }
+
+    /**
+     * Update a participant basic fields :
+     * pseudo, last name, first name, phone, mail and password
+     *
+     * @param $participant
+     *
+     * @Rest\View()
+     * @ParamConverter("participant", converter="fos_rest.request_body")
+     */
+    public function putParticipantUpdateAction(Participant $participant) {
+        $em = $this->getDoctrine()->getManager();
+        $repository = $this->getDoctrine()->getRepository(Participant::class);
+        $participantToUpdate = $repository->findOneBy(array('nbParticipant' => $participant->getNbParticipant()));
+        // 404 if no pseudo
+        if (empty($participantToUpdate)) {
+            throw new HttpException(Response::HTTP_NOT_FOUND, 'Utilisateur inconnu');
+        }
+        // Participant must have unique pseudo
+        if ($participant->getPseudo() != $participantToUpdate->getPseudo()) {
+            if ($repository->findOneBy(array('pseudo' => $participant->getPseudo())) !== null) {
+                // 401 if not
+                throw new HttpException(Response::HTTP_UNAUTHORIZED, 'Pseudo déjà pris');
+            } else {
+                $participantToUpdate->setPseudo($participant->getPseudo());
+            }
+        }
+        $participantToUpdate->setLastName($participant->getLastName());
+        $participantToUpdate->setFirstName($participant->getFirstName());
+        $participantToUpdate->setPhone($participant->getPhone());
+        $participantToUpdate->setMail($participant->getMail());
+        $participantToUpdate->setPassword(password_hash($participant->getPassword(), PASSWORD_BCRYPT));
+        $em->flush();
     }
 }
