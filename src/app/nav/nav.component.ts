@@ -8,14 +8,24 @@ import {LoginManagementService} from '../services/login-management.service';
 })
 export class NavComponent implements OnInit {
   isUserLoggedIn: boolean;
+  currentUser: any;
 
   constructor(private loginManagement: LoginManagementService) {
-    this.loginManagement.isUserLoggedIn.subscribe(
-      value => { this.isUserLoggedIn = value; }
-    );
+
   }
 
   ngOnInit() {
+    this.loginManagement.isUserLoggedIn.subscribe(
+      value => {
+        this.isUserLoggedIn = value;
+      }
+    );
+    this.loginManagement.currentUser.subscribe(
+      value => {
+        this.currentUser = value;
+      }
+    );
+
   }
 
   onDisconnect() {

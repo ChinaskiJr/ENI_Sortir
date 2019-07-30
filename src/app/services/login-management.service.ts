@@ -10,7 +10,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class LoginManagementService {
 
   public isUserLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public currentUser: any = JSON.parse(localStorage.getItem('currentUser'));
+  public currentUser: BehaviorSubject<Participant> = new BehaviorSubject<Participant>(null);
 
   constructor(private httpClient: HttpClient,
               private cookieService: CookieService) {
@@ -25,12 +25,12 @@ export class LoginManagementService {
 
   /**
    * Store the user passed in argument as the logged in user in local storage
+   * and update the observable
    * @param participant The user to log in
    */
   public storeCurrentUser(participant: Participant): void {
-    localStorage.setItem('currentUser', JSON.stringify(participant));
-    // Update the observable
     this.isUserLoggedIn.next(true);
+    this.currentUser.next(participant);
   }
 
   /**
@@ -69,13 +69,10 @@ export class LoginManagementService {
    * Log out the user : destroy cookies and localstorage
    */
   public logoutCurrentUser(): void {
-    if (localStorage.getItem('currentUser')) {
-      this.cookieService.delete('sortir-user');
-      this.cookieService.delete('sortir-token');
-      localStorage.removeItem('currentUser');
-    }
+    this.cookieService.delete('sortir-user');
+    this.cookieService.delete('sortir-token');
     this.isUserLoggedIn.next(false);
-
+    this.currentUser.next(null);
   }
 
   /**

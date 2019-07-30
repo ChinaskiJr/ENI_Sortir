@@ -17,13 +17,14 @@ export class AppComponent implements OnInit {
    * Check if a user is remembered, and log him in if it is
    */
   ngOnInit(): void {
-    if (this.cookieService.check('sortir-user') &&  this.cookieService.check('sortir-token')) {
+    if (this.cookieService.check('sortir-user') && this.cookieService.check('sortir-token')) {
       this.loginManagement.checkIfWeRememberCurrentUser().subscribe(
         (participant) => {
           this.loginManagement.storeCurrentUser(participant);
       },
         (error) => {
           console.log('Error : ' + error.status + ':' + error.message);
+          this.loginManagement.logoutCurrentUser();
         }
       );
     }

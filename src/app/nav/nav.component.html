@@ -4,9 +4,9 @@
       <a routerLink="login">Connexion</a>
     </li>
     <li *ngIf="isUserLoggedIn" class="nav-item active mr-2">
-      <a routerLink="profile/{{ loginManagement.currentUser['pseudo'] }}" >Gérer mon profil</a>
+      <a routerLink="profile/{{ currentUser['pseudo'] }}" >Gérer mon profil</a>
     </li>
-    <li *ngIf="isUserLoggedIn" class="nav-item active mr-2">{{ loginManagement.currentUser["pseudo"] }}
+    <li *ngIf="isUserLoggedIn" class="nav-item active mr-2">{{ currentUser["pseudo"] }}
       <span class="link" (click)="onDisconnect()">(se déconnecter)</span>
     </li>
   </ul>

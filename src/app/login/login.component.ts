@@ -34,9 +34,14 @@ export class LoginComponent implements OnInit {
     return this.loginForm.controls[field].invalid &&
       (this.loginForm.controls[field].dirty ||
         this.loginForm.controls[field].touched);
+
   }
 
   ngOnInit() {
+    // If the user is already connects, it should not be there
+    if (this.loginManager.isUserLoggedIn.value) {
+      this.router.navigate(['/home']);
+    }
   }
 
   pseudoNotValid() {
