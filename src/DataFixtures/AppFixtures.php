@@ -19,6 +19,12 @@ class AppFixtures extends Fixture
     {
         $site = new Site('Nantes');
         $city = new City('Nantes', '44000');
+        $city1 = new City('Rennes', '35000');
+        $city2 = new City('Niort', '78000');
+        $city3 = new City('Quimper', '29000');
+        $manager->persist($city1);
+        $manager->persist($city2);
+        $manager->persist($city3);
         $location = new Location(
             'Parc de Procé',
             'Rue de Procé',

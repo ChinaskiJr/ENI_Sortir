@@ -4,4 +4,7 @@ controllers:
 participant:
     resource: App\Controller\ParticipantController
     type: rest
+city:
+    resource: App\Controller\CityController
+    type: rest
 
