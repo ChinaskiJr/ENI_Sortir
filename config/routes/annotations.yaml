@@ -1,10 +1,10 @@
-controllers:
-    resource: ../../src/Controller/
-    type: annotation
 participant:
     resource: App\Controller\ParticipantController
     type: rest
 city:
     resource: App\Controller\CityController
+    type: rest
+site:
+    resource: App\Controller\SiteController
     type: rest
 

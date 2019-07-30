@@ -17,7 +17,10 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        $site = new Site('Nantes');
+        $site = new Site('ENI_Nantes');
+        $site1 = new Site('ENI_Rennes');
+        $site2 = new Site('ENI_Niort');
+        $manager->persist($site2);
         $city = new City('Nantes', '44000');
         $city1 = new City('Rennes', '35000');
         $city2 = new City('Niort', '78000');
@@ -68,7 +71,7 @@ class AppFixtures extends Fixture
                 password_hash('weakPassword', PASSWORD_BCRYPT),
                 false,
                 true,
-                new Site('Nantes')
+                $site1
             );
             $registration = new Registration();
             $registration->setDateRegistration(new DateTime());
