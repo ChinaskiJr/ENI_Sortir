@@ -1,0 +1,122 @@
+<div class="container mt-3">
+  <!-- If it is our profile -->
+  <form *ngIf="currentUser && pseudoProfile == currentUser.pseudo"
+    [formGroup]="profileForm"
+    (ngSubmit)="onSubmitForm()">
+    <h3 class="text-center m-3">Mon profil</h3>
+    <div class="form-group row">
+      <label for="pseudo" class="col-sm-4 offset-lg-3 col-lg-2 col-form-label">
+        Pseudo
+      </label>
+      <div class="col-sm-8 col-lg-4">
+        <input type="text"
+               id="pseudo"
+               class="form-control"
+               formControlName="pseudo">
+      </div>
+    </div>
+    <div *ngIf="error == '401'" class="offset-lg-3 col-lg-6 mb-2 p-2 alert-danger">
+      Ce pseudo est déjà pris
+    </div>
+    <div *ngIf="pseudoNotValid()" class="offset-lg-3 col-lg-6 mb-2 p-2 alert-danger">
+      Le pseudo est obligatoire
+    </div>
+    <div class="form-group row">
+      <label for="firstName" class="col-sm-4 offset-lg-3 col-lg-2 col-form-label">
+        Prénom
+      </label>
+      <div class="col-sm-8 col-lg-4">
+        <input type="text" id="firstName"
+               class="form-control" formControlName="firstName"
+        >
+      </div>
+    </div>
+    <div *ngIf="firstNameNotValid()" class="offset-lg-3 col-lg-6 mb-2 p-2 alert-danger">
+      Le prénom est obligatoire
+    </div>
+    <div class="form-group row">
+      <label for="lastName" class="col-sm-4 offset-lg-3 col-lg-2 col-form-label">
+        Nom
+      </label>
+      <div class="col-sm-8 col-lg-4">
+        <input type="text" id="lastName"
+               class="form-control" formControlName="lastName"
+        >
+      </div>
+    </div>
+    <div *ngIf="lastNameNotValid()" class="offset-lg-3 col-lg-6 mb-2 p-2 alert-danger">
+      Le nom est obligatoire
+    </div>
+    <div class="form-group row">
+      <label for="phone" class="col-sm-4 offset-lg-3 col-lg-2 col-form-label">
+        Téléphone
+      </label>
+      <div class="col-sm-8 col-lg-4">
+        <input type="text" id="phone"
+               class="form-control" formControlName="phone"
+        >
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="mail" class="col-sm-4 offset-lg-3 col-lg-2 col-form-label">
+        Email
+      </label>
+      <div class="col-sm-8 col-lg-4">
+        <input type="mail" id="mail"
+               class="form-control" formControlName="mail"
+        >
+      </div>
+    </div>
+    <div *ngIf="mailNotValid()" class="offset-lg-3 col-lg-6 mb-2 p-2 alert-danger">
+      Cette valeur ne correspond pas à une adresse mail
+    </div>
+    <div class="offset-lg-3 col-lg-6 mb-2 alert-info p-2">
+      Ne remplir les champs suivants qu'en cas de modification
+    </div>
+    <div class="form-group row">
+      <label for="password" class="col-sm-4 offset-lg-3 col-lg-2 col-form-label">
+        Mot de passe
+      </label>
+      <div class="col-sm-8 col-lg-4">
+        <input type="password" id="password"
+               class="form-control" formControlName="password">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="confirmPassword" class="col-sm-4 offset-lg-3 col-lg-2 col-form-label">
+        Confirmation
+      </label>
+      <div class="col-sm-8 col-lg-4">
+        <input type="password" id="confirmPassword"
+               class="form-control" formControlName="confirmPassword">
+      </div>
+    </div>
+    <div *ngIf="passwordNotValid()" class="offset-lg-3 col-lg-6 mb-2 p-2 alert-danger">
+      Les mots de passes ne correspondent pas
+    </div>
+    <div class="form-group row">
+      <label for="site" class="col-sm-4 offset-lg-3 col-lg-2 col-form-label">
+        Site de rattachement
+      </label>
+      <div class="col-sm-8 col-lg-4">
+        <select formControlName="site" id="site" class="custom-select">
+          <option *ngFor="let site of sites"
+                  ngValue="{{ site.nbSite }}"
+          >
+            {{ site.nameSite }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <input type="submit" class="btn btn-success"
+             [disabled]="issueValidation()"
+      >
+    </div>
+  </form>
+  <!-- If it is not -->
+  <div *ngIf="currentUser == null || isUserLoggedIn == false">
+    Future feature here
+  </div>
+
+</div>
