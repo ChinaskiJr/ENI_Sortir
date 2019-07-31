@@ -59,7 +59,38 @@ class AppFixtures extends Fixture
             $location,
             $organizer,
             $site);
+
+            $pursuit2 = new Pursuit(
+            'Hockey sur Glace',
+            new DateTime(),
+            180,
+            new DateTime('tomorrow'),
+            15,
+            'L\'occasion de faire du sport au frais',
+            1,
+            null,
+            new State('EnCours'),
+            $location,
+            $organizer,
+            $site1);
+
+            $pursuit3 = new Pursuit(
+            'Hockey sur bitume',
+            new DateTime(),
+            180,
+            new DateTime('tomorrow'),
+            15,
+            'L\'occasion de faire du sport en ville',
+            1,
+            null,
+            new State('EnCours'),
+            $location,
+            $organizer,
+            $site2);
+
         $manager->persist($pursuit);
+        $manager->persist($pursuit2);
+        $manager->persist($pursuit3);
         // To bind them all
         for ($i = 0 ; $i < 5 ; $i++) {
             $participant = new Participant(

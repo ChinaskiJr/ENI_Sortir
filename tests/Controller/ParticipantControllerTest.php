@@ -64,14 +64,19 @@ class ParticipantControllerTest extends WebTestCase
      public function testGetParticipantAction() {
          $this->client->request('GET', '/participants/0');
          $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
-         $this->client->request('GET', '/participants/64');
+         $this->client->request('GET', '/participants/76');
          $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
          $this->assertJson($this->client->getResponse()->getContent());
      }
 
     public function testParticipantUpdateAction() {
+        // Get the ID
+        $id = $this->entityManager->createQuery(
+            'SELECT p.nbParticipant FROM App\Entity\Participant p WHERE p.pseudo = :pseudo'
+        )->setParameter('pseudo', 'organizer')->execute();
+        $id = $id[0]['nbParticipant'];
         // Get to get
-        $this->client->request('GET', '/participants/64');
+        $this->client->request('GET', '/participants/' . $id);
         $jsonParticipant = $this->client->getResponse()->getContent();
         $jsonParticipant = json_decode($jsonParticipant);
         $jsonParticipant->first_name = 'ArthurUpdate';
@@ -79,10 +84,10 @@ class ParticipantControllerTest extends WebTestCase
         $jsonParticipant = json_encode($jsonParticipant);
         $this->client->request('PUT', '/participant/update', [], [], [], $jsonParticipant);
         // Check after update
-        $participantToUpdate = $this->repository->find(64);
+        $participantToUpdate = $this->repository->find($id);
         $this->assertEquals('ArthurUpdate', $participantToUpdate->getFirstName());
         // Check for exception if non-unique pseudo
-        $this->client->request('GET', '/participants/64');
+        $this->client->request('GET', '/participants/' . $id);
         $jsonParticipant = $this->client->getResponse()->getContent();
         $jsonParticipant = json_decode($jsonParticipant);
         $jsonParticipant->pseudo = 'participant0';
