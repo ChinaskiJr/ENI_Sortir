@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
+use App\Entity\Site;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -108,11 +109,10 @@ class ParticipantController extends AbstractFOSRestController
     /**
      * Update a participant basic fields :
      * pseudo, last name, first name, phone, mail and password
-     *
      * @param $participant
-     *
      * @Rest\View()
      * @ParamConverter("participant", converter="fos_rest.request_body")
+     * @return Participant|null
      */
     public function putParticipantUpdateAction(Participant $participant) {
         $em = $this->getDoctrine()->getManager();
@@ -124,7 +124,7 @@ class ParticipantController extends AbstractFOSRestController
         }
         // Participant must have unique pseudo
         if ($participant->getPseudo() != $participantToUpdate->getPseudo()) {
-            if ($repository->findOneBy(array('pseudo' => $participant->getPseudo())) !== null) {
+            if ($repository->findOneBy(array('pseudo' => $participant->getPseudo())) != null) {
                 // 401 if not
                 throw new HttpException(Response::HTTP_UNAUTHORIZED, 'Pseudo déjà pris');
             } else {
@@ -135,7 +135,12 @@ class ParticipantController extends AbstractFOSRestController
         $participantToUpdate->setFirstName($participant->getFirstName());
         $participantToUpdate->setPhone($participant->getPhone());
         $participantToUpdate->setMail($participant->getMail());
-        $participantToUpdate->setPassword(password_hash($participant->getPassword(), PASSWORD_BCRYPT));
+        if (!empty($participant->getPassword())) {
+            $participantToUpdate->setPassword(password_hash($participant->getPassword(), PASSWORD_BCRYPT));
+        }
+        $site = $this->getDoctrine()->getRepository(Site::class)->find($participant->getSite()->getNbSite());
+        $participantToUpdate->setSite($site);
         $em->flush();
+        return $participantToUpdate;
     }
 }
