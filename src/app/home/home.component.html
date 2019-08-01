@@ -1,9 +1,64 @@
 <div class="mt-4 mb-2">
   <h2 class="text-center">Sorties disponibles</h2>
-  <form>
-    <!-- Filters will be there -->
-  </form>
+  <!-- Filter form -->
+  <div class="container mb-3">
+    <form [formGroup]="filterPursuitsForm">
+      <h4>Filtrer les sorties</h4>
+      <div class="form-group row mb-0">
+        <label class="col-lg-2 col-form-label" for="site">Site</label>
+        <select formControlName="site" id="site" class="custom-select col-lg-3">
+          <option *ngFor="let site of sites"
+                  ngValue="{{ site.nbSite }}"
+          >
+            {{ site.nameSite }}
+          </option>
+        </select>
+        <div class="form-check offset-lg-2 d-flex flex-column">
+          <div>
+            <input type="checkbox" formControlName="amIOrganizer" id="amIOrganizer" class="form-check-input">
+            <label class="form-check-label" for="amIOrganizer">Sorties dont je suis l'organisateur.trice</label>
+          </div>
+          <div>
+            <input type="checkbox" formControlName="didISubscribe" id="didISubscribe" class="form-check-input">
+            <label class="form-check-label" for="didISubscribe">Sorties auxquelles je suis inscrit.e</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="pursuitsContains" class="col-form-label col-lg-3">Le nom de la sortie contient</label>
+        <input type="search" formControlName="pursuitsContains" class="form-control col-lg-2" id="pursuitsContains">
+        <div class="form-check offset-lg-2 d-flex flex-column">
+          <div>
+            <input type="checkbox" formControlName="didINotSubscribe" id="didINotSubscribe" class="form-check-input">
+            <label class="form-check-label" for="didINotSubscribe">Sorties auxquelles je ne suis pas inscrit.e</label>
+          </div>
+          <div>
+            <input type="checkbox" formControlName="didThisEnded" id="didThisEnded" class="form-check-input">
+            <label class="form-check-label" for="didThisEnded">Sorties passées</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="startDate" class="col-form-label col-lg-1">Entre le</label>
+        <input type="date" id="startDate" formControlName="startDate" class="form-control col-lg-2">
+        <label for="endDate" class="col-form-label col-lg-1">et le</label>
+        <input type="date" id="endDate" formControlName="endDate" class="form-control col-lg-2">
+        <button [disabled]="startDateNotValid()"
+                (click)="onSubmitFilter()"
+                type="submit"
+                class="btn btn-block btn-success offset-lg-1 col-lg-4">
+          Filtrer
+        </button>
+        <div *ngIf="startDateNotValid()" class="col-lg-6 mt-1 p-2 alert-danger">
+          La date de départ ne peut pas être avant la date de fin
+        </div>
+      </div>
+    </form>
+  </div>
+  <hr>
+  <!-- Table for pursuits -->
   <div class="table-responsive row">
+    <h5 class="text-center m-4">Sorties prévues sur le site {{ this.currentSite.value.nameSite }}</h5>
     <table class="table offset-1 offset-lg-2 col-lg-8">
       <thead class="thead-light">
       <tr>
@@ -18,7 +73,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let pursuit of pursuits">
+      <tr *ngFor="let pursuit of pursuits.value">
         <th scope="row">{{ pursuit.name }}</th>
         <td>{{ pursuit.dateStart | date:'short' }}</td>
         <td>{{ pursuit.registrations.length }} / {{ pursuit.nbMaxRegistrations }}</td>

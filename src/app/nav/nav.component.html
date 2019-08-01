@@ -1,5 +1,8 @@
 <nav class="navbar navbar-expand-md navbar-light">
   <ul class="navbar-nav d-flex w-100 justify-content-around">
+    <li class="nav-item active mr-2">
+      <a routerLink="home">Accueil</a>
+    </li>
     <li *ngIf="!isUserLoggedIn" class="nav-item active mr-2">
       <a routerLink="login">Connexion</a>
     </li>
