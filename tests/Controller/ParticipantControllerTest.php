@@ -44,11 +44,17 @@ class ParticipantControllerTest extends WebTestCase
     }
 
     public function testParticipantLoginAction() {
-        $this->client->request('GET', '/participants/organizer/logins/weakPassword');
+        $options = array('pseudo' => 'organizer', 'password' => 'weakPassword');
+        $options = json_encode($options);
+        $this->client->request('POST', '/participants/logins', [], [], [], $options);
         $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $this->client->request('GET', '/participants/marco/logins/weakPassword');
+        $options = array('pseudo' => 'marco', 'password' => 'weakPassword');
+        $options = json_encode($options);
+        $this->client->request('POST', '/participants/logins', [], [], [], $options);
         $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
-        $this->client->request('GET', '/participants/organizer/logins/noPassword');
+        $options = array('pseudo' => 'organizer', 'password' => 'noPassword');
+        $options = json_encode($options);
+        $this->client->request('POST', '/participants/logins', [], [], [], $options);
         $this->assertEquals(Response::HTTP_FORBIDDEN, $this->client->getResponse()->getStatusCode());
     }
 
