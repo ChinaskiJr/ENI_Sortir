@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Participant} from '../models/Participant';
 import {BehaviorSubject, Observable} from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class LoginManagementService {
 
 
   constructor(private httpClient: HttpClient,
-              private cookieService: CookieService) {
+              private cookieService: CookieService,
+              private router: Router) {
   }
 
   /**
@@ -26,6 +28,9 @@ export class LoginManagementService {
   public storeCurrentUser(participant: Participant): void {
     this.isUserLoggedIn.next(true);
     this.currentUser.next(participant);
+    if (this.providedUrl.length > 0) {
+      this.router.navigate([this.providedUrl]);
+    }
   }
 
   /**
@@ -68,6 +73,7 @@ export class LoginManagementService {
     this.cookieService.delete('sortir-token');
     this.isUserLoggedIn.next(false);
     this.currentUser.next(null);
+    this.router.navigate(['/login']);
   }
 
   /**
