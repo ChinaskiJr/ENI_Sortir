@@ -11,6 +11,8 @@ export class LoginManagementService {
 
   public isUserLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public currentUser: BehaviorSubject<Participant> = new BehaviorSubject<Participant>(null);
+  public providedUrl: string = null;
+
 
   constructor(private httpClient: HttpClient,
               private cookieService: CookieService) {

@@ -15,6 +15,7 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {BasicAuthHttpInterceptor} from './helpers/BasicAuthHttpInterceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { ProfileComponent } from './profile/profile.component';
+import {AuthGuardService} from './services/auth-guard.service';
 
 // Set up the locale to french
 registerLocaleData(localeFr, 'fr');
@@ -39,7 +40,8 @@ registerLocaleData(localeFr, 'fr');
   providers: [
     { provide: LOCALE_ID, useValue: 'fr' },
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthHttpInterceptor, multi: true },
-    CookieService
+    CookieService,
+    AuthGuardService
   ],
   bootstrap: [AppComponent]
 })

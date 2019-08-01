@@ -1,5 +1,8 @@
 <div class="container">
-  <h3 class="mt-3">Connexion</h3>
+  <h3 class="mt-3 text-center">Connexion</h3>
+  <div *ngIf="this.loginManager.providedUrl.length !== 0" class="alert-danger p-2 mb-2">
+    Ce site est dédié uniquement aux membres de l'ENI. Merci de vous identifier.
+  </div>
   <form [formGroup]="loginForm">
     <div class="form-group row">
       <label for="pseudo" class=" col-sm-4 col-lg-2 col-form-label">Nom</label>
@@ -16,7 +19,7 @@
     <div class="form-group row">
       <label for="password" class=" col-sm-4 col-lg-2 col-form-label">Mot de passe</label>
       <div class="col-sm-8 col-lg-10">
-        <input type="password"
+        <input type="password" class="form-control"
                id="password" formControlName="password"
                [ngClass]="{
                 'form-control': true,

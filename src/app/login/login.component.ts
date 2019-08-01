@@ -73,7 +73,12 @@ export class LoginComponent implements OnInit {
             if (formValue.rememberMe) {
                this.loginManager.rememberCurrentUser(this.participant).subscribe();
             }
-            this.router.navigate(['/home']);
+            console.log(this.loginManager.providedUrl);
+            if (this.loginManager.providedUrl.length > 0) {
+              this.router.navigate([this.loginManager.providedUrl]);
+            } else {
+              this.router.navigate(['/home']);
+            }
           },
           (error) => {
             this.error = error.status;
