@@ -11,6 +11,7 @@ use App\Entity\Site;
 use App\Entity\State;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
@@ -44,7 +45,8 @@ class AppFixtures extends Fixture
             password_hash('weakPassword', PASSWORD_BCRYPT),
             false,
             true,
-            $site);
+            $site,
+            new ArrayCollection());
         // One pursuit
         $pursuit = new Pursuit(
             'Hockey sur Gazon',
@@ -102,7 +104,8 @@ class AppFixtures extends Fixture
                 password_hash('weakPassword', PASSWORD_BCRYPT),
                 false,
                 true,
-                $site1
+                $site1,
+                new ArrayCollection()
             );
             $registration = new Registration();
             $registration->setDateRegistration(new DateTime());

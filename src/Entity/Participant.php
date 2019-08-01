@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -105,6 +104,7 @@ class Participant
      * @param bool $admin
      * @param bool $active
      * @param Site $site
+     * @param Collection $registrations
      */
     public function __construct(string $pseudo,
                                 string $lastName,
@@ -114,7 +114,8 @@ class Participant
                                 string $password,
                                 bool $admin,
                                 bool $active,
-                                Site $site)
+                                Site $site,
+                                Collection $registrations)
     {
         $this->pseudo = $pseudo;
         $this->lastName = $lastName;
@@ -125,7 +126,7 @@ class Participant
         $this->admin = $admin;
         $this->active = $active;
         $this->site = $site;
-        $this->registrations = new ArrayCollection();
+        $this->registrations = $registrations;
     }
 
 
@@ -269,6 +270,12 @@ class Participant
                 $registration->setParticipant(null);
             }
         }
+
+        return $this;
+    }
+
+    public function setRegistrations(Collection $registrations): self {
+        $this->registrations = $registrations;
 
         return $this;
     }

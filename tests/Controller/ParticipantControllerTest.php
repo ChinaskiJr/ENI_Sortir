@@ -62,9 +62,14 @@ class ParticipantControllerTest extends WebTestCase
     }
 
      public function testGetParticipantAction() {
+         // Get the ID
+         $id = $this->entityManager->createQuery(
+             'SELECT p.nbParticipant FROM App\Entity\Participant p WHERE p.pseudo = :pseudo'
+         )->setParameter('pseudo', 'organizer')->execute();
+         $id = $id[0]['nbParticipant'];
          $this->client->request('GET', '/participants/0');
          $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
-         $this->client->request('GET', '/participants/76');
+         $this->client->request('GET', '/participants/' . $id);
          $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
          $this->assertJson($this->client->getResponse()->getContent());
      }
@@ -79,7 +84,7 @@ class ParticipantControllerTest extends WebTestCase
         $this->client->request('GET', '/participants/' . $id);
         $jsonParticipant = $this->client->getResponse()->getContent();
         $jsonParticipant = json_decode($jsonParticipant);
-        $jsonParticipant->first_name = 'ArthurUpdate';
+        $jsonParticipant->firstName = 'ArthurUpdate';
         $jsonParticipant->password = 'weakPassword';
         $jsonParticipant = json_encode($jsonParticipant);
         $this->client->request('PUT', '/participant/update', [], [], [], $jsonParticipant);
