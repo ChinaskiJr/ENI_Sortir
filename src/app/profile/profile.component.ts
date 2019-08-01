@@ -97,7 +97,7 @@ export class ProfileComponent implements OnInit {
         updatedUser.pseudo = formValue.pseudo;
       }
       if (this.currentUser.lastName !== formValue.lastName) {
-        updatedUser.pseudo = formValue.lastName;
+        updatedUser.lastName = formValue.lastName;
       }
       if (this.currentUser.firstName !== formValue.firstName) {
         updatedUser.firstName = formValue.firstName;
@@ -109,11 +109,13 @@ export class ProfileComponent implements OnInit {
         updatedUser.mail = formValue.mail;
       }
       if (formValue.site.length > 0) {
-        this.currentUser.site = { nbSite: formValue.site};
+        // tslint:disable-next-line:triple-equals
+        updatedUser.site = this.sites.find(site => site.nbSite == formValue.site);
       }
-
       if (formValue.password.length > 0) {
         updatedUser.password = formValue.password;
+      } else {
+        updatedUser.password = null;
       }
       this.participantManagement.putUpdateParticipant(updatedUser).subscribe(
         (response) => {
