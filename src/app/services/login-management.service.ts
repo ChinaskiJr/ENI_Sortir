@@ -11,18 +11,11 @@ export class LoginManagementService {
 
   public isUserLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public currentUser: BehaviorSubject<Participant> = new BehaviorSubject<Participant>(null);
-  public providedUrl: string = null;
+  public providedUrl = '';
 
 
   constructor(private httpClient: HttpClient,
               private cookieService: CookieService) {
-  }
-
-  /**
-   * Dynamically create the URL for GET login request
-   */
-  static createLoginUrl(username, password): string {
-    return 'participants/' + username + '/logins/' + password;
   }
 
   /**
@@ -81,8 +74,11 @@ export class LoginManagementService {
    * Check for the match username/password with the API
    */
   public loginParticipant(username, password): Observable<Participant> {
-    return this.httpClient.get<Participant>(
-      LoginManagementService.createLoginUrl(username, password),
+    return this.httpClient.post<Participant>(
+      'participants/logins', {
+        pseudo: username,
+        password
+      }
     );
   }
 }
