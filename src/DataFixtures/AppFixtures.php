@@ -18,6 +18,9 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
+        $stateEnCours = new State('En Cours');
+        $stateFerme = new State('Fermé');
+        $stateOuvert = new State('Ouvert');
         $site = new Site('ENI_Nantes');
         $site1 = new Site('ENI_Rennes');
         $site2 = new Site('ENI_Niort');
@@ -47,54 +50,106 @@ class AppFixtures extends Fixture
             true,
             $site,
             new ArrayCollection());
+
+        $participant = new Participant(
+            'participant',
+            'Sylvestre',
+            'Guillaume',
+            null,
+            'guillaume@gmail.com',
+            password_hash('weakPassword', PASSWORD_BCRYPT),
+            false,
+            true,
+            $site,
+            new ArrayCollection()
+        );
+
         // One pursuit
         $pursuit = new Pursuit(
             'Hockey sur Gazon',
-            new DateTime(),
+            new DateTime("+1 week"),
             180,
             new DateTime('tomorrow'),
             15,
             'L\'occasion de faire du sport en prenant l\'air',
             1,
             null,
-            new State('EnCours'),
+            $stateOuvert,
             $location,
-            $organizer,
+            $participant,
             $site);
+
+            $registration = new Registration();
+            $registration->setDateRegistration(new DateTime());
+            $registration->setPursuit($pursuit);
+            $registration->setParticipant($participant);
+            $participant->addRegistration($registration);
+            $manager->persist($participant);
 
             $pursuit2 = new Pursuit(
             'Hockey sur Glace',
             new DateTime(),
             180,
-            new DateTime('tomorrow'),
+            new DateTime('-1 day'),
             15,
             'L\'occasion de faire du sport au frais',
             1,
             null,
-            new State('EnCours'),
+            $stateEnCours,
             $location,
             $organizer,
             $site1);
 
-            $pursuit3 = new Pursuit(
-            'Hockey sur bitume',
+            $pursuit4 = new Pursuit(
+            'Hockey sur Glace',
             new DateTime(),
             180,
-            new DateTime('tomorrow'),
+            new DateTime('-1 day'),
+            15,
+            'L\'occasion de faire du sport au frais',
+            1,
+            null,
+            $stateEnCours,
+            $location,
+            $organizer,
+            $site);
+
+            $pursuit3 = new Pursuit(
+            'Hockey sur bitume',
+            new DateTime('-1 day'),
+            180,
+            new DateTime('-3 day'),
             15,
             'L\'occasion de faire du sport en ville',
             1,
             null,
-            new State('EnCours'),
+            $stateFerme,
             $location,
             $organizer,
             $site2);
 
+            $pursuit5 = new Pursuit(
+            'Hockey sur bitume',
+            new DateTime('-1 day'),
+            180,
+            new DateTime('-3 day'),
+            15,
+            'L\'occasion de faire du sport en ville',
+            1,
+            null,
+            $stateFerme,
+            $location,
+            $organizer,
+            $site);
+
+
         $manager->persist($pursuit);
         $manager->persist($pursuit2);
         $manager->persist($pursuit3);
+        $manager->persist($pursuit4);
+        $manager->persist($pursuit5);
         // To bind them all
-        for ($i = 0 ; $i < 5 ; $i++) {
+        for ($i = 1 ; $i < 5 ; $i++) {
             $participant = new Participant(
                 'participant' . $i,
                 'Sylvestre' . $i,
@@ -104,7 +159,7 @@ class AppFixtures extends Fixture
                 password_hash('weakPassword', PASSWORD_BCRYPT),
                 false,
                 true,
-                $site1,
+                $site,
                 new ArrayCollection()
             );
             $registration = new Registration();
