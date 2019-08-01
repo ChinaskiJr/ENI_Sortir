@@ -1,1 +1,37 @@
-<p style="text-align: center">home works!</p>
+<div class="mt-4 mb-2">
+  <h2 class="text-center">Sorties disponibles</h2>
+  <form>
+    <!-- Filters will be there -->
+  </form>
+  <div class="table-responsive row">
+    <table class="table offset-1 offset-lg-2 col-lg-8">
+      <thead class="thead-light">
+      <tr>
+        <th scope="col">Nom de la sortie</th>
+        <th scope="col">Date de la sortie</th>
+        <th scope="col">inscrits/places</th>
+        <th scope="col">Clôture de l'inscription</th>
+        <th scope="col">Etat</th>
+        <th scope="col">Inscrit</th>
+        <th scope="col">Organisateur</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let pursuit of pursuits">
+        <th scope="row">{{ pursuit.name }}</th>
+        <td>{{ pursuit.dateStart | date:'short' }}</td>
+        <td>{{ pursuit.registrations.length }} / {{ pursuit.nbMaxRegistrations }}</td>
+        <td>{{ pursuit.dateEnd | date }}</td>
+        <td>{{ pursuit.state['word'] }}</td>
+        <td>
+          <span *ngIf="checkForRegistration(pursuit.registrations)">
+            X
+          </span></td>
+        <td>{{ pursuit.organizer.pseudo }}</td>
+        <td><!-- TODO : Actions ? --></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
