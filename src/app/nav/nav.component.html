@@ -1,16 +1,24 @@
 <nav class="navbar navbar-expand-md navbar-light">
   <ul class="navbar-nav d-flex w-100 justify-content-around">
     <li class="nav-item active mr-2">
-      <a routerLink="home">Accueil</a>
+      <span class="nav-titles"><a routerLink="home">Accueil</a></span>
+
     </li>
     <li *ngIf="!isUserLoggedIn" class="nav-item active mr-2">
-      <a routerLink="login">Connexion</a>
+      <span class="nav-titles"><a routerLink="login">Connexion</a></span>
+
     </li>
     <li *ngIf="isUserLoggedIn" class="nav-item active mr-2">
-      <a routerLink="profile/{{ currentUser['pseudo'] }}" >Gérer mon profil</a>
+      <span class="nav-titles"><a routerLink="pursuit_creation" >Créer une sortie</a></span>
+
     </li>
-    <li *ngIf="isUserLoggedIn" class="nav-item active mr-2">{{ currentUser["pseudo"] }}
-      <span class="link" (click)="onDisconnect()">(se déconnecter)</span>
+    <li *ngIf="isUserLoggedIn" class="nav-item active mr-2">
+      <span class="nav-titles"><a routerLink="profile/{{ currentUser['pseudo'] }}" >Gérer mon profil</a></span>
+
+    </li>
+    <li *ngIf="isUserLoggedIn" class="nav-item active mr-2">
+      <span class="nav-titles"><span class="link" (click)="onDisconnect()">Déconnexion</span></span>
+
     </li>
   </ul>
 </nav>

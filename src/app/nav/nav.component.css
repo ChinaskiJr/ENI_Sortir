@@ -12,3 +12,7 @@ a {
   cursor: pointer;
   text-decoration: underline;
 }
+.nav-titles {
+  font-family: 'Changa', sans-serif;
+  font-size: 1.15rem;
+}

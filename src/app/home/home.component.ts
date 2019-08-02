@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit {
   currentSite: BehaviorSubject<Site> = new BehaviorSubject<Site>(null);
   pursuits: BehaviorSubject<Pursuit[]> = new BehaviorSubject<Pursuit[]>(null);
   filterPursuitsForm: FormGroup;
+  get now(): string { return Date(); }
 
   constructor(private loginManagement: LoginManagementService,
               private pursuitManagement: PursuitsManagementService,
