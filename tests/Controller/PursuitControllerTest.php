@@ -54,4 +54,5 @@ class PursuitControllerTest extends WebTestCase
         $result = json_decode($result, true);
         $this->assertEquals('Hockey sur Gazon', $result[0]['name']);
     }
+
 }

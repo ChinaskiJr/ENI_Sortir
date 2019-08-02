@@ -19,6 +19,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $stateEnCours = new State('En Cours');
+        $stateEnCreation = new State('En création');
         $stateFerme = new State('Fermé');
         $stateOuvert = new State('Ouvert');
         $site = new Site('ENI_Nantes');
@@ -35,8 +36,8 @@ class AppFixtures extends Fixture
         $location = new Location(
             'Parc de Procé',
             'Rue de Procé',
-            456,
-            123,
+            -1.641132,
+            47.245842,
             $city
         );
         $organizer = new Participant(
@@ -142,12 +143,26 @@ class AppFixtures extends Fixture
             $organizer,
             $site);
 
+            $pursuit6 = new Pursuit(
+                'Hockey sur piscine',
+                new DateTime('+1 week'),
+                180,
+                new DateTime('+4 day'),
+                15,
+                'L\'occasion de se laver en même temps qu\'on transpire',
+                1,
+                null,
+                $stateEnCreation,
+                $location,
+                $participant,
+                $site);
 
         $manager->persist($pursuit);
         $manager->persist($pursuit2);
         $manager->persist($pursuit3);
         $manager->persist($pursuit4);
         $manager->persist($pursuit5);
+        $manager->persist($pursuit6);
         // To bind them all
         for ($i = 1 ; $i < 5 ; $i++) {
             $participant = new Participant(

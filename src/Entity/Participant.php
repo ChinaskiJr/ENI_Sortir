@@ -81,7 +81,7 @@ class Participant
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Registration", mappedBy="participant", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Registration", mappedBy="participant", cascade={"persist"}, fetch="EXTRA_LAZY")
      */
     private $registrations;
 

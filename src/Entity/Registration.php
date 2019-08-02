@@ -13,19 +13,19 @@ use Doctrine\ORM\Mapping as ORM;
 class Registration
 {
     /**
-     * @var Pursuit
+     * @var integer
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Pursuit", inversedBy="registrations", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Pursuit", inversedBy="registrations", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="pursuits_nb_pursuit", referencedColumnName="nb_pursuit")
      */
     private $pursuit;
 
     /**
-     * @var Participant
+     * @var integer
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Participant", inversedBy="registrations", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Participant", inversedBy="registrations", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="participants_nb_participant", referencedColumnName="nb_participant")
      */
     private $participant;
@@ -37,7 +37,7 @@ class Registration
      */
     private $dateRegistration;
 
-    public function getPursuit(): ?Pursuit
+    public function getPursuit()
     {
         return $this->pursuit;
     }
@@ -49,12 +49,12 @@ class Registration
         return $this;
     }
 
-    public function getParticipant(): ?Participant
+    public function getParticipant()
     {
         return $this->participant;
     }
 
-    public function setParticipant(Participant $participant): self
+    public function setParticipant($participant): self
     {
         $this->participant = $participant;
 
@@ -76,6 +76,4 @@ class Registration
     {
         $this->dateRegistration = $dateRegistration;
     }
-
-
 }

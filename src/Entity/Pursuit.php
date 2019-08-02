@@ -124,7 +124,7 @@ class Pursuit
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Registration", mappedBy="pursuit")
+     * @ORM\OneToMany(targetEntity="Registration", mappedBy="pursuit", cascade={"persist"}, fetch="EXTRA_LAZY")
      */
     private $registrations;
 
@@ -327,6 +327,10 @@ class Pursuit
     public function getRegistrations(): Collection
     {
         return $this->registrations;
+    }
+
+    public function setRegistrations($registrations) {
+        $this->registrations = $registrations;
     }
 
     public function addRegistration(Registration $registration): self
