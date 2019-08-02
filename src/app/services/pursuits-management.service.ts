@@ -14,4 +14,13 @@ export class PursuitsManagementService {
   public getPursuitsBySite(site: Site): Observable<Pursuit[]> {
     return this.httpClient.get<Pursuit[]>('pursuits/site/' + site.nbSite);
   }
+  public postPursuit(pursuit: Pursuit): Observable<Pursuit> {
+    const url =
+      'organizer/' + pursuit.organizer.nbParticipant +
+      '/state/' + pursuit.state.nbState +
+      '/location/' + pursuit.location.nbLocation +
+      '/site/' + pursuit.site.nbSite +
+      '/pursuits';
+    return this.httpClient.post<Pursuit>(url, pursuit);
+  }
 }

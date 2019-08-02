@@ -16,6 +16,7 @@ import {BasicAuthHttpInterceptor} from './helpers/BasicAuthHttpInterceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { ProfileComponent } from './profile/profile.component';
 import {AuthGuardService} from './services/auth-guard.service';
+import { PursuitCreationComponent } from './pursuit-creation/pursuit-creation.component';
 
 // Set up the locale to french
 registerLocaleData(localeFr, 'fr');
@@ -28,7 +29,8 @@ registerLocaleData(localeFr, 'fr');
     LoginComponent,
     ErrorComponent,
     NavComponent,
-    ProfileComponent
+    ProfileComponent,
+    PursuitCreationComponent
   ],
   imports: [
     BrowserModule,

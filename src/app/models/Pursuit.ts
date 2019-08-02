@@ -1,18 +1,21 @@
 import {Participant} from './Participant';
 import {Registration} from './Registration';
+import {State} from './State';
+import {Location} from './Location';
+import {Site} from './Site';
 
 export class Pursuit {
   public nbPursuit: number;
   public name: string;
-  public dateStart: Date;
+  public dateStart: string;
   public duration: number;
-  public dateEnd: Date;
+  public dateEnd: string;
   public nbMaxRegistrations: number;
   public description: string;
-  public state: object;
+  public state: State;
   public urlPicture: string;
   public registrations: Registration[];
-  public location: object;
-  public site: object;
+  public location: Location;
+  public site: Site;
   public organizer: Participant;
 }
