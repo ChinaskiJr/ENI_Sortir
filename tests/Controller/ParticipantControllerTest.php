@@ -101,7 +101,7 @@ class ParticipantControllerTest extends WebTestCase
         $this->client->request('GET', '/participants/' . $id);
         $jsonParticipant = $this->client->getResponse()->getContent();
         $jsonParticipant = json_decode($jsonParticipant);
-        $jsonParticipant->pseudo = 'participant0';
+        $jsonParticipant->pseudo = 'participant';
         $jsonParticipant = json_encode($jsonParticipant);
         $this->client->request('PUT', '/participant/update', [], [], [], $jsonParticipant);
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->client->getResponse()->getStatusCode());
