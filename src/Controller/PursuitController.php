@@ -10,6 +10,8 @@ use App\Entity\State;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PursuitController extends AbstractFOSRestController
 {
@@ -52,5 +54,20 @@ class PursuitController extends AbstractFOSRestController
         $em->persist($pursuit);
         $em->flush();
         return $pursuit;
+    }
+
+    /**
+     * @Rest\View()
+     * @param $nbPursuit
+     * @return Pursuit|null
+     */
+    public function getPursuitAction($nbPursuit) {
+        $repository = $this->getDoctrine()->getRepository(Pursuit::class);
+        $pursuit = $repository->find($nbPursuit);
+        if (empty($pursuit)) {
+            throw new HttpException(Response::HTTP_NOT_FOUND, 'Sortie inconnu');
+        } else {
+            return $pursuit;
+        }
     }
 }
