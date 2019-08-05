@@ -23,7 +23,7 @@
     <div class="row ml-0">
       <div class="col-lg-6 p-0 ">
         <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="startDateNotValid()">
-          La date de la sortie est obligatoire
+          La date de la sortie est obligatoire et ne peut pas être avant aujourd'hui
         </div>
       </div>
       <div class="offset-lg-1 col-lg-5 p-0">
@@ -45,11 +45,10 @@
         Ajouter un nouveau lieu
       </button>
     </div>
-    <!-- TODO : Créer une nouvelle location (fenêtre modale Bootstrap ?) -->
     <div class="row ml-0">
       <div class="col-lg-6 p-0 ">
         <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="endDateNotValid()">
-          La date limite d'inscription est obligatoire et ne peut pas être après la date de la sortie
+          La date limite d'inscription est obligatoire et ne peut pas être avant aujourd'hui, ni après la date de la sortie
         </div>
       </div>
       <div class="offset-lg-1 col-lg-5 p-0">

@@ -12,7 +12,7 @@ import {State} from '../models/State';
 import {StatesManagementService} from '../services/states-management.service';
 import {PursuitsManagementService} from '../services/pursuits-management.service';
 import {Router} from '@angular/router';
-import {startDateMustBeAfterEndDate} from '../helpers/DateValidators';
+import {dateMustNotBeBeforeNow, startDateMustBeAfterEndDate} from '../helpers/DateValidators';
 
 @Component({
   selector: 'app-pursuit-creation',
@@ -65,7 +65,11 @@ export class PursuitCreationComponent implements OnInit {
       city: ['', Validators.required],
       location: ['', Validators.required],
     }, {
-      validators: startDateMustBeAfterEndDate('endDate', 'startDate')
+      validators: [
+        startDateMustBeAfterEndDate('endDate', 'startDate'),
+        dateMustNotBeBeforeNow('endDate'),
+        dateMustNotBeBeforeNow('startDate')
+    ]
     });
     this.locationForm = this.formBuilder.group({
       locationName: ['', Validators.required],

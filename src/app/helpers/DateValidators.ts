@@ -1,4 +1,4 @@
-import {FormGroup} from '@angular/forms';
+import { FormGroup} from '@angular/forms';
 
 /**
  * Custom validator checks if a date is before another one
@@ -13,6 +13,20 @@ export function startDateMustBeAfterEndDate(startDate: string, endDate: string) 
       } else {
         controlStartDate.setErrors(null);
       }
+    }
+  };
+}
+
+/**
+ * Custom validator checks if a date is not before the current date
+ */
+export function dateMustNotBeBeforeNow(dateToTest: string) {
+  return (formGroup: FormGroup) => {
+    const controlDateToTest = formGroup.controls[dateToTest];
+    if (new Date(controlDateToTest.value) <= new Date()) {
+      controlDateToTest.setErrors({dateBeforeToday: true});
+    } else {
+      controlDateToTest.setErrors(null);
     }
   };
 }
