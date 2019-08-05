@@ -36,6 +36,10 @@
     <span class="offset-lg-1 col-lg-2">Longitude :</span>
     <span class="col-lg-3"> {{ pursuit.location.longitude }}</span>
   </p>
+  <div *ngIf="pursuit.organizer.nbParticipant === currentUser.nbParticipant"
+  class="d-flex justify-content-around">
+    <button *ngIf="pursuit.state.word === 'En création'" class="btn btn-success">Publier ma sortie</button>
+  </div>
   <hr>
   <div class="mx-auto">
     <h5 class="text-center mb-4">Liste des participants inscrits :</h5>
