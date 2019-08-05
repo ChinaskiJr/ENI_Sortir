@@ -14,4 +14,8 @@ export class LocationsManagementService {
   public getLocationsByCity(city: City): Observable<Location[]> {
     return this.httpClient.get<Location[]>('locations/city/' + city.nbCity);
   }
+
+  public postLocation(location: Location): Observable<Location> {
+    return this.httpClient.post<Location>('locations/city/' + location.city.nbCity, location);
+  }
 }

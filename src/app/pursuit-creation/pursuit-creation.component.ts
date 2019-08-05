@@ -20,12 +20,6 @@ import {startDateMustBeAfterEndDate} from '../helpers/DateValidators';
   styleUrls: ['./pursuit-creation.component.css']
 })
 export class PursuitCreationComponent implements OnInit {
-  pursuitForm: FormGroup;
-  currentUser: Participant;
-  cities: City[];
-  locations: BehaviorSubject<Location[]> = new BehaviorSubject<Location[]>(null);
-  currentLocation: BehaviorSubject<Location> = new BehaviorSubject<Location>(null);
-  states: State[];
 
   constructor(private formBuilder: FormBuilder,
               private loginManagement: LoginManagementService,
@@ -35,6 +29,14 @@ export class PursuitCreationComponent implements OnInit {
               private pursuitsManagement: PursuitsManagementService,
               private router: Router) {
   }
+  pursuitForm: FormGroup;
+  locationForm: FormGroup;
+  currentUser: Participant;
+  cities: City[];
+  locations: BehaviorSubject<Location[]> = new BehaviorSubject<Location[]>(null);
+  currentLocation: BehaviorSubject<Location> = new BehaviorSubject<Location>(null);
+  currentCity: City;
+  states: State[];
 
   ngOnInit() {
     this.loginManagement.currentUser.subscribe(
@@ -65,7 +67,12 @@ export class PursuitCreationComponent implements OnInit {
     }, {
       validators: startDateMustBeAfterEndDate('endDate', 'startDate')
     });
-    // TODO : Valider les nombres (nbMaxRegistration & duree > 0 par ex)
+    this.locationForm = this.formBuilder.group({
+      locationName: ['', Validators.required],
+      street: ['', Validators.required],
+      latitude: ['', Validators.required],
+      longitude: ['', Validators.required]
+    });
   }
 
   /**
@@ -74,8 +81,8 @@ export class PursuitCreationComponent implements OnInit {
   onSelectCity() {
     const formCityValue = this.pursuitForm.value.city;
     // tslint:disable-next-line:triple-equals
-    const cityInstance = this.cities.find(city => city.nbCity == formCityValue);
-    this.locationsManagement.getLocationsByCity(cityInstance).subscribe(
+    this.currentCity = this.cities.find(city => city.nbCity == formCityValue);
+    this.locationsManagement.getLocationsByCity(this.currentCity).subscribe(
       value => this.locations.next(value)
     );
   }
@@ -92,7 +99,7 @@ export class PursuitCreationComponent implements OnInit {
 
   onRecord() {
     const formValues = this.pursuitForm.value;
-    if (!this.issueValidation()) {
+    if (!this.issueValidation(this.pursuitForm)) {
       const stateInCreation: State = this.states.find((state) => state.word === 'En création');
       const newPursuit = this.hydratePursuit(formValues);
       newPursuit.state = stateInCreation;
@@ -103,12 +110,29 @@ export class PursuitCreationComponent implements OnInit {
 
   onPublish() {
     const formValues = this.pursuitForm.value;
-    if (!this.issueValidation()) {
+    if (!this.issueValidation(this.pursuitForm)) {
       const stateOpen: State = this.states.find((state) => state.word === 'Ouvert');
       const newPursuit = this.hydratePursuit(formValues);
       newPursuit.state = stateOpen;
       this.pursuitsManagement.postPursuit(newPursuit).subscribe();
       this.router.navigate(['/home']);
+    }
+  }
+
+  onNewLocation() {
+    const formValues = this.locationForm.value;
+    if (!this.issueValidation(this.locationForm)) {
+      const newLocation: Location = this.hydrateLocation(formValues);
+      this.locationsManagement.postLocation(newLocation).subscribe(
+        () => {},
+        () => {},
+        () => {
+          // Reload after submit
+          this.locationsManagement.getLocationsByCity(this.currentCity).subscribe(
+            value => this.locations.next(value)
+          );
+        }
+      );
     }
   }
 
@@ -127,38 +151,60 @@ export class PursuitCreationComponent implements OnInit {
     return newPursuit;
   }
 
-  private invalidField(field: string) {
-    return this.pursuitForm.controls[field].invalid && (
-      this.pursuitForm.controls[field].touched ||
-      this.pursuitForm.controls[field].dirty);
+  private hydrateLocation(formValues) {
+    const newLocation = new Location();
+    newLocation.nameLocation = formValues.locationName;
+    newLocation.street = formValues.street;
+    newLocation.latitude = formValues.latitude;
+    newLocation.longitude = formValues.longitude;
+    newLocation.city = this.currentCity;
+    return newLocation;
   }
 
-  private issueValidation() {
-    return this.pursuitForm.invalid || this.pursuitForm.pristine;
+  private invalidField(form: FormGroup, field: string) {
+    return form.controls[field].invalid && (
+      form.controls[field].touched ||
+      form.controls[field].dirty);
+  }
+
+  private issueValidation(form: FormGroup) {
+    return form.invalid || form.pristine;
   }
 
   nameNotValid() {
-    return this.invalidField('name');
+    return this.invalidField(this.pursuitForm, 'name');
   }
   startDateNotValid() {
-    return this.invalidField('startDate');
+    return this.invalidField(this.pursuitForm, 'startDate');
   }
   endDateNotValid() {
-    return this.invalidField('endDate');
+    return this.invalidField(this.pursuitForm, 'endDate');
   }
   nbMaxRegistrationsNotValid() {
-    return this.invalidField('nbMaxRegistrations');
+    return this.invalidField(this.pursuitForm, 'nbMaxRegistrations');
   }
   durationNotValid() {
-    return this.invalidField('duration');
+    return this.invalidField(this.pursuitForm, 'duration');
   }
   descriptionNotValid() {
-    return this.invalidField('description');
+    return this.invalidField(this.pursuitForm, 'description');
   }
   cityNotValid() {
-    return this.invalidField('city');
+    return this.invalidField(this.pursuitForm, 'city');
   }
   locationNotValid() {
-    return this.invalidField('location');
+    return this.invalidField(this.pursuitForm, 'location');
+  }
+  locationNameNotValid() {
+    return this.invalidField(this.locationForm, 'locationName');
+  }
+  streetNotValid() {
+    return this.invalidField(this.locationForm, 'street');
+  }
+  latitudeNotValid() {
+    return this.invalidField(this.locationForm, 'latitude');
+  }
+  longitudeNotValid() {
+    return this.invalidField(this.locationForm, 'longitude');
   }
 }

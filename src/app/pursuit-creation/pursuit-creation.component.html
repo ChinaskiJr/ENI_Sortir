@@ -39,6 +39,11 @@
       <select *ngIf="locations.value !== null" formControlName="location" id="location" class="col-lg-3 form-control" (change)="onSelectLocation()">
         <option *ngFor="let location of locations.value" value="{{ location.nbLocation }}">{{ location.nameLocation }}</option>
       </select>
+      <button *ngIf="locations.value !== null"
+              data-toggle="modal" data-target="#formNewLocation"
+              class="btn btn-info offset-lg-9 mt-2" type="button">
+        Ajouter un nouveau lieu
+      </button>
     </div>
     <!-- TODO : Créer une nouvelle location (fenêtre modale Bootstrap ?) -->
     <div class="row ml-0">
@@ -89,9 +94,54 @@
       La description est obligatoire
     </div>
     <div class="row mt-5">
-      <button [disabled]="issueValidation()" class="btn btn-info offset-lg-2 col-lg-2" (click)="onRecord()">Enregistrer</button>
-      <button [disabled]="issueValidation()" class="btn btn-success offset-lg-1 col-lg-2" (click)="onPublish()">Publier la sortie</button>
+      <button [disabled]="issueValidation(pursuitForm)" class="btn btn-info offset-lg-2 col-lg-2" (click)="onRecord()">Enregistrer</button>
+      <button [disabled]="issueValidation(pursuitForm)" class="btn btn-success offset-lg-1 col-lg-2" (click)="onPublish()">Publier la sortie</button>
       <button class="btn btn-danger offset-lg-1 col-lg-2" routerLink="/home">Annuler</button>
     </div>
   </form>
+  <div class="modal fade" id="formNewLocation" tabindex="-1" role="dialog" aria-labelledby="newLocation" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title mx-auto" id="newLocation">Nouveau lieu</h5>
+        </div>
+          <form [formGroup]="locationForm">
+            <div class="modal-body">
+              <div class="row form-group">
+                <label for="locationName" class="offset-1 col-3 col-form-label">Nom</label>
+                <input type="text" class="col-7 form-control" id="locationName" formControlName="locationName">
+                <div *ngIf="locationNameNotValid()" class="offset-4 col-7 m-2 p-2 alert-danger">
+                  La description est obligatoire
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="street" class="offset-1 col-3 col-form-label">Rue</label>
+                <input type="text" class="col-7 form-control" id="street" formControlName="street">
+              </div>
+                <div *ngIf="streetNotValid()" class="offset-4 col-7 m-2 p-2 alert-danger">
+                  La rue est obligatoire
+                </div>
+              <div class="row form-group">
+                <label for="latitude" class="offset-1 col-3 col-form-label">Latitude</label>
+                <input type="number" class="col-7 form-control" id="latitude" formControlName="latitude">
+              </div>
+                <div *ngIf="latitudeNotValid()" class="offset-4 col-7 m-2 p-2 alert-danger">
+                  La latitude est obligatoire
+                </div>
+              <div class="row form-group">
+                <label for="longitude" class="offset-1 col-3 col-form-label">Longitude</label>
+                <input type="number" class="col-7 form-control" id="longitude" formControlName="longitude">
+              </div>
+                <div *ngIf="longitudeNotValid()" class="offset-4 col-7 m-2 p-2 alert-danger">
+                  La  longitude est obligatoire
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-around">
+              <button class="btn btn-success"  data-dismiss="modal" [disabled]="issueValidation(locationForm)" (click)="onNewLocation()">Valider</button>
+              <button class="btn btn-danger" data-dismiss="modal">Annuler</button>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
 </div>
