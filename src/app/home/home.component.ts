@@ -9,6 +9,7 @@ import {Registration} from '../models/Registration';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {startDateMustBeAfterEndDate} from '../helpers/DateValidators';
 import {BehaviorSubject} from 'rxjs';
+import {RegistrationsManagementService} from '../services/registrations-management.service';
 
 @Component({
   selector: 'app-home',
@@ -21,12 +22,15 @@ export class HomeComponent implements OnInit {
   currentSite: BehaviorSubject<Site> = new BehaviorSubject<Site>(null);
   pursuits: BehaviorSubject<Pursuit[]> = new BehaviorSubject<Pursuit[]>(null);
   filterPursuitsForm: FormGroup;
+  error: string;
+
   get now(): string { return Date(); }
 
   constructor(private loginManagement: LoginManagementService,
               private pursuitManagement: PursuitsManagementService,
               private siteManagement: SitesManagementService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private registrationManagement: RegistrationsManagementService) {
     this.createForm();
   }
 
@@ -158,6 +162,28 @@ export class HomeComponent implements OnInit {
         this.pursuits.value.filter(pursuit =>
           new Date(pursuit.dateStart) < new Date()
         )
+      );
+    }
+  }
+
+  /**
+   * Register an user to a pursuit, check if he is not already registered
+   * or if the maximum amount of registration already been reached
+   */
+  onRegister(pursuit: Pursuit) {
+    if (pursuit.nbMaxRegistrations === pursuit.registrations.length) {
+      this.error = 'nbMaxRegistrationError';
+    } else {
+      this.registrationManagement.postRegistration(pursuit.nbPursuit, this.currentUser.nbParticipant).subscribe(
+        () => {
+          this.pursuitManagement.getPursuitsBySite(this.currentSite.value).subscribe(
+            value => {
+              this.pursuits.next(value);
+            });
+        },
+        (error) => {
+          this.error = error.status;
+        }
       );
     }
   }
