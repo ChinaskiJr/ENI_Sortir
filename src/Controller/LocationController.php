@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\City;
 use App\Entity\Location;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -31,11 +32,15 @@ class LocationController extends AbstractFOSRestController
      * @param Location $location
      * @return Location
      *
+     * @Rest\Route("locations/city/{city}")
      * @Rest\View()
      * @ParamConverter("location", converter="fos_rest.request_body")
      */
-    public function postLocationAction(Location $location) {
+    public function postLocationAction(Location $location, $city) {
         $em = $this->getDoctrine()->getManager();
+        $repository = $this->getDoctrine()->getRepository(City::class);
+        $city = $repository->find($city);
+        $location->setCity($city);
         $em->persist($location);
         $em->flush();
         return $location;
