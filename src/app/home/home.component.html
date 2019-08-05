@@ -93,7 +93,9 @@
             X
           </span></td>
         <td>{{ pursuit.organizer.pseudo }}</td>
-        <td><!-- TODO : Actions ? --></td>
+        <td>
+          <a *ngIf="pursuit.state.word !== 'En création'" routerLink="/pursuit/{{ pursuit.nbPursuit }}">Afficher</a>
+        </td>
       </tr>
       </tbody>
     </table>

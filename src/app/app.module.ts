@@ -17,6 +17,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { ProfileComponent } from './profile/profile.component';
 import {AuthGuardService} from './services/auth-guard.service';
 import { PursuitCreationComponent } from './pursuit-creation/pursuit-creation.component';
+import { PursuitComponent } from './pursuit/pursuit.component';
 
 // Set up the locale to french
 registerLocaleData(localeFr, 'fr');
@@ -30,7 +31,8 @@ registerLocaleData(localeFr, 'fr');
     ErrorComponent,
     NavComponent,
     ProfileComponent,
-    PursuitCreationComponent
+    PursuitCreationComponent,
+    PursuitComponent
   ],
   imports: [
     BrowserModule,

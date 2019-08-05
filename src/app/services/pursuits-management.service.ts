@@ -23,4 +23,8 @@ export class PursuitsManagementService {
       '/pursuits';
     return this.httpClient.post<Pursuit>(url, pursuit);
   }
+
+  public getPursuitByNb(nbPursuit: number): Observable<Pursuit> {
+    return this.httpClient.get<Pursuit>('pursuits/' + nbPursuit);
+  }
 }

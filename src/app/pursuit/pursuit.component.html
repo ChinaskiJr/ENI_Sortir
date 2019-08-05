@@ -1,0 +1,64 @@
+<div class="container mt-3">
+  <h3 class="text-center m-3 mb-5">Afficher une sortie</h3>
+  <p class="row">
+    <span class="col-lg-3">Nom de la sortie :</span>
+    <span class="col-lg-3"> {{ pursuit.name }}</span>
+    <span class="offset-lg-1 col-lg-2">Ville organisatrice :</span>
+    <span class="col-lg-3"> {{ pursuit.location.city.nameCity }}</span>
+  </p>
+  <p class="row">
+    <span class="col-lg-3">Date et heure de la sortie :</span>
+    <span class="col-lg-3"> {{ pursuit.dateStart | date: 'short' }}</span>
+    <span class="offset-lg-1 col-lg-2">Lieu :</span>
+    <span class="col-lg-3"> {{ pursuit.location.nameLocation }}</span>
+  </p>
+  <p class="row">
+    <span class="col-lg-3">Date limite d'inscription :</span>
+    <span class="col-lg-3"> {{ pursuit.dateEnd | date: 'shortDate' }}</span>
+    <span class="offset-lg-1 col-lg-2">Rue :</span>
+    <span class="col-lg-3"> {{ pursuit.location.street }}</span>
+  </p>
+  <p class="row">
+    <span class="col-lg-3">Nombre de place :</span>
+    <span class="col-lg-3"> {{ pursuit.nbMaxRegistrations }}</span>
+    <span class="offset-lg-1 col-lg-2">Code postal :</span>
+    <span class="col-lg-3"> {{ pursuit.location.city.postalCode }}</span>
+  </p>
+  <p class="row">
+    <span class="col-lg-3">Durée :</span>
+    <span class="col-lg-3"> {{ pursuit.duration }} minutes</span>
+    <span class="offset-lg-1 col-lg-2">Latitude :</span>
+    <span class="col-lg-3"> {{ pursuit.location.latitude }}</span>
+  </p>
+  <p class="row">
+    <span class="col-lg-3">Description et infos :</span>
+    <span class="col-lg-3"> {{ pursuit.description }}</span>
+    <span class="offset-lg-1 col-lg-2">Longitude :</span>
+    <span class="col-lg-3"> {{ pursuit.location.longitude }}</span>
+  </p>
+  <hr>
+  <div class="mx-auto">
+    <h5 class="text-center mb-4">Liste des participants inscrits :</h5>
+    <div *ngIf="pursuit.registrations.length !== 0" class="table-responsive row">
+      <table class="table offset-lg-3 col-lg-6">
+        <thead class="thead-light">
+        <tr>
+          <th scope="col">Pseudo</th>
+          <th scope="col">Nom</th>
+        </tr>
+        </thead>
+        <tr *ngFor="let participant of pursuit.registrations">
+          <td>
+            {{ participant.participant.pseudo }}
+          </td>
+          <td>
+            {{participant.participant.firstName }}&nbsp;{{ participant.participant.lastName | uppercase }}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <p *ngIf="pursuit.registrations.length === 0" class="text-center">
+      Aucun inscrit.e pour le moment.
+    </p>
+  </div>
+</div>
