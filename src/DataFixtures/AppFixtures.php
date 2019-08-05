@@ -20,8 +20,10 @@ class AppFixtures extends Fixture
     {
         $stateEnCours = new State('En Cours');
         $stateEnCreation = new State('En création');
-        $stateFerme = new State('Fermé');
+        $stateFerme = new State('Inscriptions clôturées');
         $stateOuvert = new State('Ouvert');
+        $stateTermine = new State('Terminé');
+        $manager->persist($stateTermine);
         $site = new Site('ENI_Nantes');
         $site1 = new Site('ENI_Rennes');
         $site2 = new Site('ENI_Niort');
