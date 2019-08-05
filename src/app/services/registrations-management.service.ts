@@ -13,4 +13,8 @@ export class RegistrationsManagementService {
   public postRegistration(nbPursuit: number, nbParticipant: number): Observable<Registration> {
     return this.httpClient.post<Registration>('registration/pursuit/' + nbPursuit + '/participant/' + nbParticipant, null);
   }
+
+  public deleteRegistration(nbPursuit: number, nbParticipant: number): Observable<null> {
+    return this.httpClient.delete<null>('registration/pursuit/' + nbPursuit + '/participant/' + nbParticipant);
+  }
 }

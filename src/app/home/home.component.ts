@@ -188,6 +188,24 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  /**
+   * Desist an user from a pursuit
+   */
+  onDesist(pursuit: Pursuit) {
+    this.registrationManagement.deleteRegistration(pursuit.nbPursuit, this.currentUser.nbParticipant).subscribe(
+      () => {
+        this.pursuitManagement.getPursuitsBySite(this.currentSite.value).subscribe(
+          value => {
+            this.pursuits.next(value);
+          });
+      },
+      (error) => {
+        this.error = error.status;
+        console.log(error);
+      }
+    );
+  }
+
   startDateNotValid() {
     return this.invalidField('startDate');
   }
@@ -204,4 +222,5 @@ export class HomeComponent implements OnInit {
     }
     return registered;
   }
+
 }
