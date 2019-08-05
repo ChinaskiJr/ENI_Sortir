@@ -22,10 +22,14 @@
     </div>
     <div class="row ml-0">
       <div class="col-lg-6 p-0 ">
-        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="startDateNotValid()">La date de la sortie est obligatoire</div>
+        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="startDateNotValid()">
+          La date de la sortie est obligatoire
+        </div>
       </div>
       <div class="offset-lg-1 col-lg-5 p-0">
-        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="cityNotValid()">La ville est obligatoire</div>
+        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="cityNotValid()">
+          La ville est obligatoire
+        </div>
       </div>
     </div>
     <div class="form-group row">
@@ -39,33 +43,37 @@
     <!-- TODO : Créer une nouvelle location (fenêtre modale Bootstrap ?) -->
     <div class="row ml-0">
       <div class="col-lg-6 p-0 ">
-        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="endDateNotValid()">La date limite d'inscription est obligatoire</div>
+        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="endDateNotValid()">
+          La date limite d'inscription est obligatoire et ne peut pas être après la date de la sortie
+        </div>
       </div>
       <div class="offset-lg-1 col-lg-5 p-0">
-        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="locationNotValid()">Le lieu est obligatoire</div>
+        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="locationNotValid()">
+          Le lieu est obligatoire
+        </div>
       </div>
     </div>
     <div class="form-group row">
       <label for="nbMaxRegistrations" class="col-lg-3 col-form-label">Nombre de places</label>
-      <input type="number" class="col-lg-3 form-control" id="nbMaxRegistrations" formControlName="nbMaxRegistrations">
+      <input type="number" min="0" class="col-lg-3 form-control" id="nbMaxRegistrations" formControlName="nbMaxRegistrations">
       <span *ngIf="currentLocation.value !== null" class="offset-lg-1 col-lg-2">Rue</span>
       <span *ngIf="currentLocation.value !== null">
         {{ currentLocation.value.street }}
       </span>
     </div>
     <div *ngIf="nbMaxRegistrationsNotValid()" class="col-lg-6 mb-2 p-2 alert-danger">
-      Le nombre de places maximum est obligatoire
+      Le nombre de places maximum est obligatoire et ne peut pas être inférieure à 2
     </div>
     <div class="form-group row">
       <label for="duration" class="col-lg-3 col-form-label">Durée (minutes)</label>
-      <input type="number" step="5" class="col-lg-3 form-control" id="duration" formControlName="duration">
+      <input type="number" step="5" min="0" class="col-lg-3 form-control" id="duration" formControlName="duration">
       <span *ngIf="currentLocation.value !== null" class="offset-lg-1 col-lg-2">Code postal</span>
       <span *ngIf="currentLocation.value !== null">
         {{ currentLocation.value.city.postalCode }}
       </span>
     </div>
     <div *ngIf="durationNotValid()" class="col-lg-6 mb-2 p-2 alert-danger">
-      La durée est obligatoire
+      La durée est obligatoire et ne peut pas être inférieure à 5
     </div>
     <div class="form-group row">
       <label for="description" class="col-lg-3 col-form-label">Description</label>

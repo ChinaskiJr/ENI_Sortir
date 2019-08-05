@@ -11,6 +11,8 @@ import {Pursuit} from '../models/Pursuit';
 import {State} from '../models/State';
 import {StatesManagementService} from '../services/states-management.service';
 import {PursuitsManagementService} from '../services/pursuits-management.service';
+import {Router} from '@angular/router';
+import {startDateMustBeAfterEndDate} from '../helpers/DateValidators';
 
 @Component({
   selector: 'app-pursuit-creation',
@@ -30,7 +32,8 @@ export class PursuitCreationComponent implements OnInit {
               private citiesManagement: CitiesManagementService,
               private locationsManagement: LocationsManagementService,
               private statesManagement: StatesManagementService,
-              private pursuitsManagement: PursuitsManagementService) {
+              private pursuitsManagement: PursuitsManagementService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -54,13 +57,14 @@ export class PursuitCreationComponent implements OnInit {
       name: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      nbMaxRegistrations: ['', Validators.required],
-      duration: ['', Validators.required],
+      nbMaxRegistrations: ['', [Validators.required, Validators.min(2)]],
+      duration: ['', [Validators.required, Validators.min(5) ]],
       description: ['', Validators.required],
       city: ['', Validators.required],
       location: ['', Validators.required],
+    }, {
+      validators: startDateMustBeAfterEndDate('endDate', 'startDate')
     });
-    // TODO : Valider les dates
     // TODO : Valider les nombres (nbMaxRegistration & duree > 0 par ex)
   }
 
@@ -93,7 +97,7 @@ export class PursuitCreationComponent implements OnInit {
       const newPursuit = this.hydratePursuit(formValues);
       newPursuit.state = stateInCreation;
       this.pursuitsManagement.postPursuit(newPursuit).subscribe();
-      // TODO : Rerouter vers home ensuite
+      this.router.navigate(['/home']);
     }
   }
 
@@ -104,7 +108,7 @@ export class PursuitCreationComponent implements OnInit {
       const newPursuit = this.hydratePursuit(formValues);
       newPursuit.state = stateOpen;
       this.pursuitsManagement.postPursuit(newPursuit).subscribe();
-      // TODO : Rerouter vers home ensuite
+      this.router.navigate(['/home']);
     }
   }
 
