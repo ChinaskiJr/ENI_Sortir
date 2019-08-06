@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
         this.sites = value;
       });
     this.currentSite.next(this.currentUser.site);
-    this.pursuitManagement.getPursuitsBySite(this.currentSite.value).subscribe(
+    this.pursuitManagement.getPursuitsExceptArchivedBySite(this.currentSite.value).subscribe(
       value => {
         this.pursuits.next(value);
       }
