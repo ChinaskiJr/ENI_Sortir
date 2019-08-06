@@ -33,10 +33,12 @@ class PursuitController extends AbstractFOSRestController
 
     /**
      * Post new Pursuit
-     *
      * @param Pursuit $pursuit
+     * @param $organizerId
+     * @param $stateId
+     * @param $locationId
+     * @param $siteId
      * @return Pursuit
-     *
      * @Rest\Route("/organizer/{organizerId}/state/{stateId}/location/{locationId}/site/{siteId}/pursuits")
      * @Rest\View()
      * @ParamConverter("pursuit", converter="fos_rest.request_body")
@@ -69,5 +71,20 @@ class PursuitController extends AbstractFOSRestController
         } else {
             return $pursuit;
         }
+    }
+
+    /**
+     * Update a pursuit
+     *
+     * @Rest\View()
+     * @ParamConverter("pursuit", converter="fos_rest.request_body")
+     * @param Pursuit $pursuit
+     * @return Pursuit
+     */
+    public function putPursuitAction(Pursuit $pursuit) {
+        $em = $this->getDoctrine()->getManager();
+        $em->merge($pursuit);
+        $em->flush();
+        return $pursuit;
     }
 }

@@ -177,6 +177,10 @@ class Pursuit
         return $this->nbPursuit;
     }
 
+    public function setNbPursuit($nbPursuit) {
+        $this->nbPursuit = $nbPursuit;
+    }
+
     public function getName(): ?string
     {
         return $this->name;
