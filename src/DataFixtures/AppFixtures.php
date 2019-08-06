@@ -23,7 +23,12 @@ class AppFixtures extends Fixture
         $stateFerme = new State('Inscriptions clôturées');
         $stateOuvert = new State('Ouvert');
         $stateTermine = new State('Terminé');
+        $stateAnnule = new State('Annulé');
+        $stateArchive = new State('Archivé');
+
         $manager->persist($stateTermine);
+        $manager->persist($stateAnnule);
+        $manager->persist($stateArchive);
         $site = new Site('ENI_Nantes');
         $site1 = new Site('ENI_Rennes');
         $site2 = new Site('ENI_Niort');
@@ -159,12 +164,29 @@ class AppFixtures extends Fixture
                 $participant,
                 $site);
 
+            // An older pursuit
+        $pursuit7 = new Pursuit(
+            'Hockey préhistorique',
+            new DateTime('-2 month'),
+            60,
+            new DateTime('-2month -1 day'),
+            10,
+            'L\'occasion d\'aller tâter du dinosaure',
+            1,
+            null,
+            $stateTermine,
+            $location,
+            $participant,
+            $site);
+
+
         $manager->persist($pursuit);
         $manager->persist($pursuit2);
         $manager->persist($pursuit3);
         $manager->persist($pursuit4);
         $manager->persist($pursuit5);
         $manager->persist($pursuit6);
+        $manager->persist($pursuit7);
         // To bind them all
         for ($i = 1 ; $i < 5 ; $i++) {
             $participant = new Participant(
