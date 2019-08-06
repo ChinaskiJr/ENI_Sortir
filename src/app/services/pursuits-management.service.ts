@@ -27,4 +27,9 @@ export class PursuitsManagementService {
   public getPursuitByNb(nbPursuit: number): Observable<Pursuit> {
     return this.httpClient.get<Pursuit>('pursuits/' + nbPursuit);
   }
+
+  putPursuit(pursuit: Pursuit): Observable<Pursuit> {
+    console.log(pursuit.state.nbState);
+    return this.httpClient.put<Pursuit>('pursuit', pursuit);
+  }
 }

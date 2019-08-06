@@ -38,7 +38,7 @@
   </p>
   <div *ngIf="pursuit.organizer.nbParticipant === currentUser.nbParticipant"
   class="d-flex justify-content-around">
-    <button *ngIf="pursuit.state.word === 'En création'" class="btn btn-success">Publier ma sortie</button>
+    <button *ngIf="pursuit.state.word === 'En création'" class="btn btn-success" (click)="onPublish()">Publier ma sortie</button>
   </div>
   <hr>
   <div class="mx-auto">
