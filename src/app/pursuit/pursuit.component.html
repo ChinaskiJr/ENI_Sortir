@@ -38,7 +38,17 @@
   </p>
   <div *ngIf="pursuit.organizer.nbParticipant === currentUser.nbParticipant"
   class="d-flex justify-content-around">
-    <button *ngIf="pursuit.state.word === 'En création'" class="btn btn-success" (click)="onPublish()">Publier ma sortie</button>
+    <button *ngIf="pursuit.state.word === 'En création'"
+            class="btn btn-success"
+            (click)="onPublish()">
+      Publier ma sortie
+    </button>
+    <button *ngIf="pursuit.state.word === 'En création' || pursuit.state.word === 'Ouvert'"
+            class="btn btn-danger"
+            data-toggle="modal" data-target="#formNewLocation"
+            type="button">
+      Annuler ma sortie
+    </button>
   </div>
   <hr>
   <div class="mx-auto">
@@ -64,5 +74,33 @@
     <p *ngIf="pursuit.registrations.length === 0" class="text-center">
       Aucun inscrit.e pour le moment.
     </p>
+  </div>
+</div>
+<div class="modal fade" id="formNewLocation" tabindex="-1" role="dialog" aria-labelledby="message" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title mx-auto">Annulation d'une sortie</h5>
+      </div>
+      <form [formGroup]="cancelForm">
+        <div class="modal-body">
+          <div class="row form-group">
+            <label for="message" class="offset-1 col-3 col-form-label">Motif</label>
+            <input type="text" class="col-7 form-control" id="message" formControlName="message">
+            <div *ngIf="messageNotValid()" class="offset-4 col-7 m-2 p-2 alert-danger">
+              Le motif est obligatoire et ne peut pas faire plus de 30 caractères
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger mx-auto"
+                  (click)="onCancel()"
+                  data-dismiss="modal"
+                  [disabled]="issueValidation()">
+          Annuler ma sortie
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
