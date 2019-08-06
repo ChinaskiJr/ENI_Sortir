@@ -32,6 +32,26 @@ class PursuitController extends AbstractFOSRestController
     }
 
     /**
+     * Get all pursuits proposed by a Site except those archived
+     *
+     * @param $site
+     * @return Pursuit[]
+     *
+     * @Rest\Route("/pursuits/unarchived/site/{site}")
+     * @Rest\View()
+     */
+    public function getPursuitsExceptArchivedSiteAction($site) {
+        $repository = $this->getDoctrine()->getRepository(Pursuit::class);
+        // Get the archived state
+        $archivedState = $this->getDoctrine()
+            ->getRepository(State::class)
+            ->findBy(array('word' => 'Archivé'));
+        // Give the archived state entity to DQL, we don't want it !
+        $pursuits = $repository->findAllPursuitsUnarchivedBysite($site, $archivedState);
+        return $pursuits;
+    }
+
+    /**
      * Post new Pursuit
      * @param Pursuit $pursuit
      * @param $organizerId

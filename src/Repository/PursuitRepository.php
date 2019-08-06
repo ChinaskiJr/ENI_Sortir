@@ -19,32 +19,20 @@ class PursuitRepository extends ServiceEntityRepository
         parent::__construct($registry, Pursuit::class);
     }
 
-    // /**
-    //  * @return Pursuit[] Returns an array of Pursuit objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    /**
+     * Performs DQL query to get every pursuits from a site, except the archived one
+     *
+     * @param $site
+     * @param $archivedState
+     * @return mixed
+     */
+    public function findAllPursuitsUnarchivedBysite($site, $archivedState) {
+        $query = $this->getEntityManager()->createQuery("
+            SELECT p FROM App\Entity\Pursuit p
+            WHERE p.site = :site AND p.state != :archived
+            ORDER BY p.dateStart DESC")
+            ->setParameter('site', $site)
+            ->setParameter('archived', $archivedState);
+        return $query->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Pursuit
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
