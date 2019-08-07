@@ -58,6 +58,7 @@ export class PursuitCreationComponent implements OnInit {
     this.pursuitForm = this.formBuilder.group({
       name: ['', Validators.required],
       startDate: ['', Validators.required],
+      startTime: ['', Validators.required],
       endDate: ['', Validators.required],
       nbMaxRegistrations: ['', [Validators.required, Validators.min(2)]],
       duration: ['', [Validators.required, Validators.min(5) ]],
@@ -143,7 +144,7 @@ export class PursuitCreationComponent implements OnInit {
   private hydratePursuit(formValues) {
     const newPursuit = new Pursuit();
     newPursuit.name = formValues.name;
-    newPursuit.dateStart = formValues.startDate;
+    newPursuit.dateStart = formValues.startDate + 'T' + formValues.startTime;
     // To conform to API date format
     newPursuit.dateEnd = formValues.endDate + 'T00:00';
     newPursuit.nbMaxRegistrations = formValues.nbMaxRegistrations;
@@ -180,6 +181,9 @@ export class PursuitCreationComponent implements OnInit {
   }
   startDateNotValid() {
     return this.invalidField(this.pursuitForm, 'startDate');
+  }
+  startTimeNotValid() {
+    return this.invalidField(this.pursuitForm, 'startTime');
   }
   endDateNotValid() {
     return this.invalidField(this.pursuitForm, 'endDate');

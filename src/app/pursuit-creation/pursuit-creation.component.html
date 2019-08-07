@@ -2,8 +2,8 @@
   <h2 class="text-center mb-5">Créer une sortie</h2>
   <form [formGroup]="pursuitForm">
     <div class="form-group row">
-      <label for="name" class="col-lg-3 col-form-label">Nom de la sortie</label>
-      <input type="text" class="col-lg-3 form-control" id="name" formControlName="name">
+      <label for="name" class="col-lg-2 col-form-label">Nom de la sortie</label>
+      <input type="text" class="col-lg-4 form-control" id="name" formControlName="name">
       <span class="offset-lg-1 col-lg-2">Site organisateur</span>
       <span>
         {{ currentUser.site.nameSite }}
@@ -13,8 +13,9 @@
       Le nom est obligatoire
     </div>
     <div class="form-group row">
-      <label for="startDate" class="col-lg-3 col-form-label">Date et heure de la sortie</label>
-      <input type="datetime-local" class="col-lg-3 form-control" id="startDate" formControlName="startDate">
+      <label for="startDate" class="col-lg-2 col-form-label">Date de la sortie</label>
+      <input type="date" class="col-lg-2 form-control" id="startDate" formControlName="startDate">
+      <input type="time" class="col-lg-2 form-control" id="" formControlName="startTime">
       <label for="city" class="offset-lg-1 col-lg-2 col-form-label">Ville</label>
       <select formControlName="city" id="city" class="col-lg-3 form-control" (change)="onSelectCity()">
         <option *ngFor="let city of cities" value="{{ city.nbCity }}">{{ city.nameCity }}</option>
@@ -33,8 +34,8 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="endDate" class="col-lg-3 col-form-label">Date limite d'inscription</label>
-      <input type="date" class="col-lg-3 form-control" id="endDate" formControlName="endDate">
+      <label for="endDate" class="col-lg-2 col-form-label">Date limite d'inscription</label>
+      <input type="date" class="col-lg-4 form-control" id="endDate" formControlName="endDate">
       <label for="location" class="offset-lg-1 col-lg-2 col-form-label">Lieu</label>
       <select *ngIf="locations.value !== null" formControlName="location" id="location" class="col-lg-3 form-control" (change)="onSelectLocation()">
         <option *ngFor="let location of locations.value" value="{{ location.nbLocation }}">{{ location.nameLocation }}</option>
@@ -58,8 +59,8 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="nbMaxRegistrations" class="col-lg-3 col-form-label">Nombre de places</label>
-      <input type="number" min="0" class="col-lg-3 form-control" id="nbMaxRegistrations" formControlName="nbMaxRegistrations">
+      <label for="nbMaxRegistrations" class="col-lg-2 col-form-label">Nombre de places</label>
+      <input type="number" min="0" class="col-lg-4 form-control" id="nbMaxRegistrations" formControlName="nbMaxRegistrations">
       <span *ngIf="currentLocation.value !== null" class="offset-lg-1 col-lg-2">Rue</span>
       <span *ngIf="currentLocation.value !== null">
         {{ currentLocation.value.street }}
@@ -69,8 +70,8 @@
       Le nombre de places maximum est obligatoire et ne peut pas être inférieure à 2
     </div>
     <div class="form-group row">
-      <label for="duration" class="col-lg-3 col-form-label">Durée (minutes)</label>
-      <input type="number" step="5" min="0" class="col-lg-3 form-control" id="duration" formControlName="duration">
+      <label for="duration" class="col-lg-2 col-form-label">Durée (minutes)</label>
+      <input type="number" step="5" min="0" class="col-lg-4 form-control" id="duration" formControlName="duration">
       <span *ngIf="currentLocation.value !== null" class="offset-lg-1 col-lg-2">Code postal</span>
       <span *ngIf="currentLocation.value !== null">
         {{ currentLocation.value.city.postalCode }}
@@ -80,8 +81,8 @@
       La durée est obligatoire et ne peut pas être inférieure à 5
     </div>
     <div class="form-group row">
-      <label for="description" class="col-lg-3 col-form-label">Description</label>
-      <textarea class="col-lg-3 form-control" rows="5" id="description" formControlName="description"></textarea>
+      <label for="description" class="col-lg-2 col-form-label">Description</label>
+      <textarea class="col-lg-4 form-control" rows="5" id="description" formControlName="description"></textarea>
       <div *ngIf="currentLocation.value !== null" class="offset-lg-1 col-lg-3">
           <span >Latitude : {{ currentLocation.value.latitude }}</span>
       </div>
