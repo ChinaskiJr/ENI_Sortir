@@ -42,6 +42,11 @@ export class ProfileComponent implements OnInit {
     this.participantManagement.getParticipantByPseudo(this.pseudoProfile).subscribe(
       (value) => {
         this.profile = value;
+      },
+      (error) => {
+        if (error.status === 404) {
+          this.router.navigate(['/home']);
+        }
       }
     );
     // Who are we ?

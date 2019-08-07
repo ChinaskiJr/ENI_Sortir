@@ -18,6 +18,7 @@ export class PursuitComponent implements OnInit {
   currentUser: Participant;
   states: State[];
   cancelForm: FormGroup;
+  error: any;
 
   constructor(private route: ActivatedRoute,
               private pursuitManagement: PursuitsManagementService,
@@ -31,6 +32,11 @@ export class PursuitComponent implements OnInit {
     this.pursuitManagement.getPursuitByNb(this.route.snapshot.params.nbPursuit).subscribe(
       value => {
         this.pursuit = value;
+      },
+      error => {
+        if (error.status === 404) {
+          this.router.navigate(['/home']);
+        }
       }
     );
     this.loginManagement.currentUser.subscribe(
