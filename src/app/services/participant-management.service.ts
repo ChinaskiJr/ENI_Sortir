@@ -12,4 +12,7 @@ export class ParticipantManagementService {
   public putUpdateParticipant(participant: Participant): Observable<Participant> {
     return this.httpClient.put<Participant>('participant/update', participant);
   }
+  public getParticipantByPseudo(pseudo: string): Observable<Participant> {
+    return this.httpClient.get<Participant>('participant/pseudo/' + pseudo);
+  }
 }

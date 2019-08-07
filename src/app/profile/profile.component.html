@@ -115,8 +115,29 @@
     </div>
   </form>
   <!-- If it is not -->
-  <div *ngIf="currentUser == null || isUserLoggedIn == false">
-    Future feature here
+  <div *ngIf="this.currentUser.pseudo !== pseudoProfile">
+    <h2 class="text-center mb-4">{{ profile.pseudo }}</h2>
+    <p class="row">
+      <span class="offset-lg-4 col-lg-2">Prénom :</span>
+      <span class="col-lg-4">{{ profile.firstName }}</span>
+    </p>
+    <p class="row">
+      <span class="offset-lg-4 col-lg-2">Nom :</span>
+      <span class="col-lg-4">{{ profile.lastName }}</span>
+    </p>
+    <p class="row">
+      <span class="offset-lg-4 col-lg-2">Téléphone :</span>
+      <span *ngIf="profile.phone !== undefined" class="col-lg-4">{{ profile.phone }}</span>
+      <span *ngIf="profile.phone === undefined" class="col-lg-4">Non renseigné</span>
+    </p>
+    <p class="row">
+      <span class="offset-lg-4 col-lg-2">Email :</span>
+      <span class="col-lg-4">{{ profile.mail }}</span>
+    </p>
+    <p class="row">
+      <span class="offset-lg-4 col-lg-2">Site de rattachement :</span>
+      <span class="col-lg-4">{{ profile.site.nameSite }}</span>
+    </p>
+    <button type="link" routerLink="/home" class="offset-lg-6 btn btn-info">Retour</button>
   </div>
-
 </div>

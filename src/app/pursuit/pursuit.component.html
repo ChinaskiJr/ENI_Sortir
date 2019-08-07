@@ -63,7 +63,7 @@
         </thead>
         <tr *ngFor="let participant of pursuit.registrations">
           <td>
-            {{ participant.participant.pseudo }}
+            <a routerLink="/profile/{{ participant.participant.pseudo }}">{{ participant.participant.pseudo }}</a>
           </td>
           <td>
             {{participant.participant.firstName }}&nbsp;{{ participant.participant.lastName | uppercase }}

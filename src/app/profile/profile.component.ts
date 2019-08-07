@@ -16,6 +16,7 @@ import {ParticipantManagementService} from '../services/participant-management.s
 export class ProfileComponent implements OnInit {
   // Pseudo of the profile visited
   pseudoProfile: string;
+  profile: Participant;
   // We will check if the profile visited is the one of the user logged in or not
   isUserLoggedIn: boolean;
   currentUser: Participant;
@@ -38,6 +39,11 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     // Where are we ?
     this.pseudoProfile = this.route.snapshot.params.pseudo;
+    this.participantManagement.getParticipantByPseudo(this.pseudoProfile).subscribe(
+      (value) => {
+        this.profile = value;
+      }
+    );
     // Who are we ?
     this.loginManagement.isUserLoggedIn.subscribe(
       value => { this.isUserLoggedIn = value; }

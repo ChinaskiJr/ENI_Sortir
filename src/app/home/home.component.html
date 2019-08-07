@@ -99,7 +99,7 @@
           <span *ngIf="checkForRegistration(pursuit.registrations)">
             X
           </span></td>
-        <td>{{ pursuit.organizer.pseudo }}</td>
+        <td><a routerLink="/profile/{{ pursuit.organizer.pseudo }}">{{ pursuit.organizer.pseudo }}</a></td>
         <td>
           <a *ngIf="pursuit.state.word !== 'En création' && pursuit.organizer.nbParticipant !== currentUser.nbParticipant" routerLink="/pursuit/{{ pursuit.nbPursuit }}">Afficher</a>
           <a *ngIf="pursuit.organizer.nbParticipant === currentUser.nbParticipant" routerLink="/pursuit/{{ pursuit.nbPursuit }}">Gérer</a>
