@@ -143,4 +143,20 @@ class ParticipantController extends AbstractFOSRestController
         $em->flush();
         return $participantToUpdate;
     }
+
+    /**
+     * @Rest\View()
+     * @Rest\Route("/participant/pseudo/{pseudo}")
+     * @param $pseudo
+     * @return Participant|object|null
+     */
+    public function getParticipantByPseudoAction($pseudo) {
+        $repository = $this->getDoctrine()->getRepository(Participant::class);
+        $participant = $repository->findOneBy(array('pseudo' => $pseudo));
+        if (empty($participant)) {
+            throw new HttpException(404, 'Aucun participant avec ce pseudo');
+        } else {
+            return $participant;
+        }
+    }
 }
