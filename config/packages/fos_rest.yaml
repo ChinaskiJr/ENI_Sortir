@@ -14,3 +14,4 @@ fos_rest:
     format_listener:
         rules:
             - { path: ^/,  priorities: [ json ], fallback_format: json }
+            - { path: ^/participant/.*/picture, priorities: [ 'jpeg' ], fallback_format: false, prefer_extension: true }

@@ -75,13 +75,6 @@ class Pursuit
     private $statePursuit;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="urlpicture", type="string", length=250, nullable=true)
-     */
-    private $urlPicture;
-
-    /**
      * @var State
      *
      * @ORM\ManyToOne(targetEntity="State", cascade={"persist"})
@@ -265,18 +258,6 @@ class Pursuit
         return $this;
     }
 
-    public function getUrlPicture(): ?string
-    {
-        return $this->urlPicture;
-    }
-
-    public function setUrlPicture(?string $urlPicture): self
-    {
-        $this->urlPicture = $urlPicture;
-
-        return $this;
-    }
-
     public function getState(): ?State
     {
         return $this->state;
@@ -359,4 +340,5 @@ class Pursuit
 
         return $this;
     }
+
 }

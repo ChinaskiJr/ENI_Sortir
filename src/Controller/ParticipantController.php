@@ -8,6 +8,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -157,6 +159,48 @@ class ParticipantController extends AbstractFOSRestController
             throw new HttpException(404, 'Aucun participant avec ce pseudo');
         } else {
             return $participant;
+        }
+    }
+
+    /**
+     * @Rest\View()
+     * @Rest\Route("/participant/pseudo/{pseudo}/picture")
+     * @return Participant|object|null
+     */
+    public function postParticipantPictureAction($pseudo, Request $request) {
+        $repository = $this->getDoctrine()->getRepository(Participant::class);
+        $em = $this->getDoctrine()->getManager();
+        $participant = $repository->findOneBy(array('pseudo' => $pseudo));
+        // remove the old one
+        if (!empty($participant->getUrlPicture())) {
+            unlink(__DIR__ . '/../../' . $participant->getUrlPicture());
+        }
+        /**
+         * @var $picture File
+         */
+        $picture = $request->files->get('picture');
+        $directory = __DIR__ . '/../../public/img/profile';
+        $picture->move($directory);
+        $participant->setUrlPicture('/public/img/profile/' . $picture->getFilename());
+        $em->merge($participant);
+        $em->flush();
+        return $participant;
+    }
+
+    /**
+     * Returns the participant picture as
+     * @Rest\View()
+     * @Rest\Route("/participant/{pseudo}/picture")
+     * @param $pseudo
+     * @return BinaryFileResponse
+     */
+    public function getParticipantPictureAction($pseudo) {
+        $repository = $this->getDoctrine()->getRepository(Participant::class);
+        $participant = $repository->findOneBy(array('pseudo' => $pseudo));
+        if (empty($participant->getUrlPicture())) {
+            throw new HttpException(404, 'Aucune image pour ce profil');
+        } else {
+            return $this->file(__DIR__ . '/../../' . $participant->getUrlPicture());
         }
     }
 }

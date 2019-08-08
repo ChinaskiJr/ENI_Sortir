@@ -94,6 +94,13 @@ class Participant
     private $token;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="urlpicture", type="string", length=250, nullable=true)
+     */
+    private $urlPicture;
+
+    /**
      * Participant constructor.
      * @param string $pseudo
      * @param string $lastName
@@ -296,5 +303,16 @@ class Participant
         $this->token = $token;
     }
 
+    public function getUrlPicture(): ?string
+    {
+        return $this->urlPicture;
+    }
+
+    public function setUrlPicture(?string $urlPicture): self
+    {
+        $this->urlPicture = $urlPicture;
+
+        return $this;
+    }
 
 }
