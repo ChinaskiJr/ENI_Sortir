@@ -5,7 +5,8 @@
     (ngSubmit)="onSubmitForm()">
     <h3 class="text-center m-3">Mon profil</h3>
     <div class="form-group row">
-      <img class="profilePic offset-lg-1 col-lg-2" src="{{this.picture}}" alt="logoPicture" />
+      <img *ngIf="this.picture !== undefined" class="profilePic offset-lg-1 col-lg-2" src="{{this.picture}}" alt="logoPicture" />
+      <span *ngIf="this.picture === undefined" class="offset-lg-1 col-lg-2"></span>
       <label for="pseudo" class="col-sm-4 col-lg-2 col-form-label">
         Pseudo
       </label>
@@ -109,6 +110,9 @@
         </select>
       </div>
     </div>
+    <div class="form-group row ">
+      <input type="file" class="offset-lg-4 custom-file" formControlName="picture" (change)="getFile($event)">
+    </div>
     <div class="d-flex justify-content-center">
       <input type="submit" class="btn btn-success"
              [disabled]="issueValidation()"
@@ -119,7 +123,8 @@
   <div *ngIf="this.currentUser.pseudo !== pseudoProfile">
     <h2 class="text-center mb-4">{{ profile.pseudo }}</h2>
     <p class="row">
-      <img class="profilePic offset-lg-1 col-lg-2" src="{{this.picture}}" alt="logoPicture" />
+      <img *ngIf="this.picture !== undefined" class="profilePic offset-lg-1 col-lg-2" src="{{this.picture}}" alt="logoPicture" />
+      <span *ngIf="this.picture === undefined" class="offset-lg-1 col-lg-2"></span>
       <span class="offset-lg-1 col-lg-2">Prénom :</span>
       <span class="col-lg-4">{{ profile.firstName }}</span>
     </p>

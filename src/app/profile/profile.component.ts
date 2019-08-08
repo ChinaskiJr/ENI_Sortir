@@ -18,6 +18,7 @@ export class ProfileComponent implements OnInit {
   pseudoProfile: string;
   // pic of the profile
   picture: any;
+  submittedPicture: any;
   profile: Participant;
   // We will check if the profile visited is the one of the user logged in or not
   isUserLoggedIn: boolean;
@@ -96,7 +97,8 @@ export class ProfileComponent implements OnInit {
       mail: [this.currentUser.mail, [Validators.required, Validators.email]],
       password: '',
       confirmPassword: '',
-      site: ''
+      site: '',
+      picture: ''
     }, {
       // custom validator
       validators: MustMatch('password', 'confirmPassword')
@@ -111,6 +113,10 @@ export class ProfileComponent implements OnInit {
 
   issueValidation() {
     return this.profileForm.pristine || this.profileForm.invalid;
+  }
+
+  onSubmitPic() {
+
   }
 
   onSubmitForm() {
@@ -140,6 +146,20 @@ export class ProfileComponent implements OnInit {
         updatedUser.password = formValue.password;
       } else {
         updatedUser.password = null;
+      }
+      if (this.submittedPicture !== undefined) {
+        const formData = new FormData();
+        formData.append('picture', this.submittedPicture);
+        this.participantManagement.postParticipantPicture(
+          this.currentUser.pseudo,
+          formData
+          ).subscribe(
+          () => {},
+          (error) => {
+            this.error = error.status;
+            console.log(error);
+          }
+        );
       }
       this.participantManagement.putUpdateParticipant(updatedUser).subscribe(
         (response) => {
@@ -172,5 +192,9 @@ export class ProfileComponent implements OnInit {
 
   passwordNotValid() {
     return this.invalidField('confirmPassword');
+  }
+
+  getFile(event: any) {
+    this.submittedPicture = event.target.files[0];
   }
 }

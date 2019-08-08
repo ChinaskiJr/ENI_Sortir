@@ -22,4 +22,7 @@ export class ParticipantManagementService {
         responseType: 'blob'
       });
   }
+  public postParticipantPicture(pseudo: string, data: object) {
+    return this.httpClient.post('participant/pseudo/' + pseudo + '/picture', data);
+  }
 }
