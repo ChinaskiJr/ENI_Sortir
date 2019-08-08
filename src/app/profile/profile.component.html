@@ -5,7 +5,8 @@
     (ngSubmit)="onSubmitForm()">
     <h3 class="text-center m-3">Mon profil</h3>
     <div class="form-group row">
-      <label for="pseudo" class="col-sm-4 offset-lg-3 col-lg-2 col-form-label">
+      <img class="profilePic offset-lg-1 col-lg-2" src="{{this.picture}}" alt="logoPicture" />
+      <label for="pseudo" class="col-sm-4 col-lg-2 col-form-label">
         Pseudo
       </label>
       <div class="col-sm-8 col-lg-4">
@@ -118,7 +119,8 @@
   <div *ngIf="this.currentUser.pseudo !== pseudoProfile">
     <h2 class="text-center mb-4">{{ profile.pseudo }}</h2>
     <p class="row">
-      <span class="offset-lg-4 col-lg-2">Prénom :</span>
+      <img class="profilePic offset-lg-1 col-lg-2" src="{{this.picture}}" alt="logoPicture" />
+      <span class="offset-lg-1 col-lg-2">Prénom :</span>
       <span class="col-lg-4">{{ profile.firstName }}</span>
     </p>
     <p class="row">

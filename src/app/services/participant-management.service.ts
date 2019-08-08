@@ -15,4 +15,11 @@ export class ParticipantManagementService {
   public getParticipantByPseudo(pseudo: string): Observable<Participant> {
     return this.httpClient.get<Participant>('participant/pseudo/' + pseudo);
   }
+  public getParticipantPictureByPseudo(pseudo: string) {
+    return this.httpClient.get('participant/' + pseudo + '/picture',
+      {
+        headers: {'Content-Type': 'image/*'},
+        responseType: 'blob'
+      });
+  }
 }

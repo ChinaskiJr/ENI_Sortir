@@ -16,6 +16,8 @@ import {ParticipantManagementService} from '../services/participant-management.s
 export class ProfileComponent implements OnInit {
   // Pseudo of the profile visited
   pseudoProfile: string;
+  // pic of the profile
+  picture: any;
   profile: Participant;
   // We will check if the profile visited is the one of the user logged in or not
   isUserLoggedIn: boolean;
@@ -42,6 +44,17 @@ export class ProfileComponent implements OnInit {
     this.participantManagement.getParticipantByPseudo(this.pseudoProfile).subscribe(
       (value) => {
         this.profile = value;
+        if (value.urlPicture !== undefined) {
+          this.participantManagement.getParticipantPictureByPseudo(this.pseudoProfile).subscribe(
+            (picture) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(picture);
+              reader.onloadend = () => {
+                this.picture = reader.result;
+              };
+            }
+          );
+        }
       },
       (error) => {
         if (error.status === 404) {

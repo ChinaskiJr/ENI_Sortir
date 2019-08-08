@@ -14,4 +14,5 @@ export class Participant {
   public registrations: Registration[];
   // Only used in case of password update so there is no place in constructor for this
   public password: string;
+  public urlPicture: string;
 }
