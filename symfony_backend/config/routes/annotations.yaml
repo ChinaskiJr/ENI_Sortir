@@ -1,0 +1,21 @@
+participant:
+    resource: App\Controller\ParticipantController
+    type: rest
+city:
+    resource: App\Controller\CityController
+    type: rest
+site:
+    resource: App\Controller\SiteController
+    type: rest
+location:
+    resource: App\Controller\LocationController
+    type: rest
+pursuit:
+    resource: App\Controller\PursuitController
+    type: rest
+registration:
+    resource: App\Controller\RegistrationController
+    type: rest
+state:
+    resource: App\Controller\StateController
+    type: rest
