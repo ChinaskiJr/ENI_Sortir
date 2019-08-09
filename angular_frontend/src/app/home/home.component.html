@@ -1,0 +1,117 @@
+<div class="mt-4 mb-2">
+  <div class="container">
+    <div class="row">
+      <h2 class="offset-lg-4 col-lg-4">Sorties disponibles</h2>
+      <div class="offset-lg-1 d-flex flex-column border p-3">
+        <span>Participant : {{ currentUser.pseudo }}</span>
+        <span>Date du jour : {{ now | date }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter form -->
+  <div class="container mb-3">
+    <form [formGroup]="filterPursuitsForm">
+      <h4>Filtrer les sorties</h4>
+      <div class="form-group row mb-0">
+        <label class="col-lg-2 col-form-label" for="site">Site</label>
+        <select formControlName="site" id="site" class="custom-select col-lg-3">
+          <option *ngFor="let site of sites"
+                  ngValue="{{ site.nbSite }}"
+          >
+            {{ site.nameSite }}
+          </option>
+        </select>
+        <div class="form-check offset-lg-2 d-flex flex-column">
+          <div>
+            <input type="checkbox" formControlName="amIOrganizer" id="amIOrganizer" class="form-check-input">
+            <label class="form-check-label" for="amIOrganizer">Sorties dont je suis l'organisateur.trice</label>
+          </div>
+          <div>
+            <input type="checkbox" formControlName="didISubscribe" id="didISubscribe" class="form-check-input">
+            <label class="form-check-label" for="didISubscribe">Sorties auxquelles je suis inscrit.e</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="pursuitsContains" class="col-form-label col-lg-3">Le nom de la sortie contient</label>
+        <input type="search" formControlName="pursuitsContains" class="form-control col-lg-2" id="pursuitsContains">
+        <div class="form-check offset-lg-2 d-flex flex-column">
+          <div>
+            <input type="checkbox" formControlName="didINotSubscribe" id="didINotSubscribe" class="form-check-input">
+            <label class="form-check-label" for="didINotSubscribe">Sorties auxquelles je ne suis pas inscrit.e</label>
+          </div>
+          <div>
+            <input type="checkbox" formControlName="didThisEnded" id="didThisEnded" class="form-check-input">
+            <label class="form-check-label" for="didThisEnded">Sorties passées</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="startDate" class="col-form-label col-lg-1">Entre le</label>
+        <input type="date" id="startDate" formControlName="startDate" class="form-control col-lg-2">
+        <label for="endDate" class="col-form-label col-lg-1">et le</label>
+        <input type="date" id="endDate" formControlName="endDate" class="form-control col-lg-2">
+        <button [disabled]="startDateNotValid()"
+                (click)="onSubmitFilter()"
+                type="submit"
+                class="btn btn-block btn-success offset-lg-1 col-lg-4">
+          Filtrer
+        </button>
+        <div *ngIf="startDateNotValid()" class="col-lg-6 mt-1 p-2 alert-danger">
+          La date de départ ne peut pas être avant la date de fin
+        </div>
+      </div>
+    </form>
+  </div>
+  <hr>
+  <!-- Table for pursuits -->
+  <div class="table-responsive row">
+    <h5 class="text-center m-4">Sorties prévues sur le site {{ this.currentSite.value.nameSite }}</h5>
+
+    <div *ngIf="error == '403'" class="alert-danger p-2 offset-1 offset-lg-2 col-lg-8" >
+      Vous êtes déjà inscrit.e à cette sortie !
+    </div>
+    <div *ngIf="error == 'nbMaxRegistrationError'" class="alert-danger p-2 offset-1 offset-lg-2 col-lg-8" >
+      Plus de place pour cette sortie
+    </div>
+    <table class="table offset-1 offset-lg-2 col-lg-8">
+      <thead class="thead-light">
+      <tr>
+        <th scope="col">Nom de la sortie</th>
+        <th scope="col">Date de la sortie</th>
+        <th scope="col">inscrits/places</th>
+        <th scope="col">Clôture de l'inscription</th>
+        <th scope="col">Etat</th>
+        <th scope="col">Inscrit</th>
+        <th scope="col">Organisateur</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let pursuit of pursuits.value">
+        <th scope="row">{{ pursuit.name }}</th>
+        <td>{{ pursuit.dateStart | date:'short' }}</td>
+        <td>{{ pursuit.registrations.length }} / {{ pursuit.nbMaxRegistrations }}</td>
+        <td>{{ pursuit.dateEnd | date }}</td>
+        <td>{{ pursuit.state['word'] }}</td>
+        <td>
+          <span *ngIf="checkForRegistration(pursuit.registrations)">
+            X
+          </span></td>
+        <td><a routerLink="/profile/{{ pursuit.organizer.pseudo }}">{{ pursuit.organizer.pseudo }}</a></td>
+        <td>
+          <a *ngIf="pursuit.state.word !== 'En création' && pursuit.organizer.nbParticipant !== currentUser.nbParticipant" routerLink="/pursuit/{{ pursuit.nbPursuit }}">Afficher</a>
+          <a *ngIf="pursuit.organizer.nbParticipant === currentUser.nbParticipant" routerLink="/pursuit/{{ pursuit.nbPursuit }}">Gérer</a>
+          <span *ngIf="pursuit.state.word === 'Ouvert' && !checkForRegistration(pursuit.registrations)">
+            - <a routerLink="" (click)="onRegister(pursuit)">S'inscrire</a>
+          </span>
+          <span *ngIf="pursuit.state.word === 'Ouvert' && checkForRegistration(pursuit.registrations)">
+            - <a routerLink="" (click)="onDesist(pursuit)">Se désister</a>
+          </span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

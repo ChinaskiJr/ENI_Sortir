@@ -1,0 +1,18 @@
+ul {
+  list-style: none;
+}
+nav {
+  background-color: #6898b7;
+  color: ghostwhite;
+}
+a {
+  color: ghostwhite;
+}
+.link:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.nav-titles {
+  font-family: 'Changa', sans-serif;
+  font-size: 1.15rem;
+}

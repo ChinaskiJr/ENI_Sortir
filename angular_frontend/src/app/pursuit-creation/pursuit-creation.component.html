@@ -1,0 +1,147 @@
+<div class="container mt-3">
+  <h2 class="text-center mb-5">Créer une sortie</h2>
+  <form [formGroup]="pursuitForm">
+    <div class="form-group row">
+      <label for="name" class="col-lg-2 col-form-label">Nom de la sortie</label>
+      <input type="text" class="col-lg-4 form-control" id="name" formControlName="name">
+      <span class="offset-lg-1 col-lg-2">Site organisateur</span>
+      <span>
+        {{ currentUser.site.nameSite }}
+      </span>
+    </div>
+    <div *ngIf="nameNotValid()" class="col-lg-6 mb-2 p-2 alert-danger">
+      Le nom est obligatoire
+    </div>
+    <div class="form-group row">
+      <label for="startDate" class="col-lg-2 col-form-label">Date de la sortie</label>
+      <input type="date" class="col-lg-2 form-control" id="startDate" formControlName="startDate">
+      <input type="time" class="col-lg-2 form-control" id="" formControlName="startTime">
+      <label for="city" class="offset-lg-1 col-lg-2 col-form-label">Ville</label>
+      <select formControlName="city" id="city" class="col-lg-3 form-control" (change)="onSelectCity()">
+        <option *ngFor="let city of cities" value="{{ city.nbCity }}">{{ city.nameCity }}</option>
+      </select>
+    </div>
+    <div class="row ml-0">
+      <div class="col-lg-6 p-0 ">
+        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="startDateNotValid()">
+          La date de la sortie est obligatoire et ne peut pas être avant aujourd'hui
+        </div>
+      </div>
+      <div class="offset-lg-1 col-lg-5 p-0">
+        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="cityNotValid()">
+          La ville est obligatoire
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="endDate" class="col-lg-2 col-form-label">Date limite d'inscription</label>
+      <input type="date" class="col-lg-4 form-control" id="endDate" formControlName="endDate">
+      <label for="location" class="offset-lg-1 col-lg-2 col-form-label">Lieu</label>
+      <select *ngIf="locations.value !== null" formControlName="location" id="location" class="col-lg-3 form-control" (change)="onSelectLocation()">
+        <option *ngFor="let location of locations.value" value="{{ location.nbLocation }}">{{ location.nameLocation }}</option>
+      </select>
+      <button *ngIf="locations.value !== null"
+              data-toggle="modal" data-target="#formNewLocation"
+              class="btn btn-info offset-lg-9 mt-2" type="button">
+        Ajouter un nouveau lieu
+      </button>
+    </div>
+    <div class="row ml-0">
+      <div class="col-lg-6 p-0 ">
+        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="endDateNotValid()">
+          La date limite d'inscription est obligatoire et ne peut pas être avant aujourd'hui, ni après la date de la sortie
+        </div>
+      </div>
+      <div class="offset-lg-1 col-lg-5 p-0">
+        <div class=" mb-2 p-2 alert-danger mw-100" *ngIf="locationNotValid()">
+          Le lieu est obligatoire
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="nbMaxRegistrations" class="col-lg-2 col-form-label">Nombre de places</label>
+      <input type="number" min="0" class="col-lg-4 form-control" id="nbMaxRegistrations" formControlName="nbMaxRegistrations">
+      <span *ngIf="currentLocation.value !== null" class="offset-lg-1 col-lg-2">Rue</span>
+      <span *ngIf="currentLocation.value !== null">
+        {{ currentLocation.value.street }}
+      </span>
+    </div>
+    <div *ngIf="nbMaxRegistrationsNotValid()" class="col-lg-6 mb-2 p-2 alert-danger">
+      Le nombre de places maximum est obligatoire et ne peut pas être inférieure à 2
+    </div>
+    <div class="form-group row">
+      <label for="duration" class="col-lg-2 col-form-label">Durée (minutes)</label>
+      <input type="number" step="5" min="0" class="col-lg-4 form-control" id="duration" formControlName="duration">
+      <span *ngIf="currentLocation.value !== null" class="offset-lg-1 col-lg-2">Code postal</span>
+      <span *ngIf="currentLocation.value !== null">
+        {{ currentLocation.value.city.postalCode }}
+      </span>
+    </div>
+    <div *ngIf="durationNotValid()" class="col-lg-6 mb-2 p-2 alert-danger">
+      La durée est obligatoire et ne peut pas être inférieure à 5
+    </div>
+    <div class="form-group row">
+      <label for="description" class="col-lg-2 col-form-label">Description</label>
+      <textarea class="col-lg-4 form-control" rows="5" id="description" formControlName="description"></textarea>
+      <div *ngIf="currentLocation.value !== null" class="offset-lg-1 col-lg-3">
+          <span >Latitude : {{ currentLocation.value.latitude }}</span>
+      </div>
+      <div *ngIf="currentLocation.value !== null">
+        <span >Longitude : {{ currentLocation.value.longitude }}</span>
+      </div>
+    </div>
+    <div *ngIf="descriptionNotValid()" class="col-lg-6 mb-2 p-2 alert-danger">
+      La description est obligatoire
+    </div>
+    <div class="row mt-5">
+      <button [disabled]="issueValidation(pursuitForm)" class="btn btn-info offset-lg-2 col-lg-2" (click)="onRecord()">Enregistrer</button>
+      <button [disabled]="issueValidation(pursuitForm)" class="btn btn-success offset-lg-1 col-lg-2" (click)="onPublish()">Publier la sortie</button>
+      <button class="btn btn-danger offset-lg-1 col-lg-2" routerLink="/home">Annuler</button>
+    </div>
+  </form>
+  <div class="modal fade" id="formNewLocation" tabindex="-1" role="dialog" aria-labelledby="newLocation" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title mx-auto" id="newLocation">Nouveau lieu</h5>
+        </div>
+          <form [formGroup]="locationForm">
+            <div class="modal-body">
+              <div class="row form-group">
+                <label for="locationName" class="offset-1 col-3 col-form-label">Nom</label>
+                <input type="text" class="col-7 form-control" id="locationName" formControlName="locationName">
+                <div *ngIf="locationNameNotValid()" class="offset-4 col-7 m-2 p-2 alert-danger">
+                  La description est obligatoire
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="street" class="offset-1 col-3 col-form-label">Rue</label>
+                <input type="text" class="col-7 form-control" id="street" formControlName="street">
+              </div>
+                <div *ngIf="streetNotValid()" class="offset-4 col-7 m-2 p-2 alert-danger">
+                  La rue est obligatoire
+                </div>
+              <div class="row form-group">
+                <label for="latitude" class="offset-1 col-3 col-form-label">Latitude</label>
+                <input type="number" class="col-7 form-control" id="latitude" formControlName="latitude">
+              </div>
+                <div *ngIf="latitudeNotValid()" class="offset-4 col-7 m-2 p-2 alert-danger">
+                  La latitude est obligatoire
+                </div>
+              <div class="row form-group">
+                <label for="longitude" class="offset-1 col-3 col-form-label">Longitude</label>
+                <input type="number" class="col-7 form-control" id="longitude" formControlName="longitude">
+              </div>
+                <div *ngIf="longitudeNotValid()" class="offset-4 col-7 m-2 p-2 alert-danger">
+                  La  longitude est obligatoire
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-around">
+              <button class="btn btn-success"  data-dismiss="modal" [disabled]="issueValidation(locationForm)" (click)="onNewLocation()">Valider</button>
+              <button class="btn btn-danger" data-dismiss="modal">Annuler</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
